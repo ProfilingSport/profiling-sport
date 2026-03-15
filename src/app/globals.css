@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* Dézoom global desktop — plus fin et aéré */
+html {
+  font-size: 75%;
+}
+
+/* Taille normale sur mobile pour rester lisible */
+@media (max-width: 768px) {
+  html {
+    font-size: 100%;
+  }
+}
+
 @theme {
   /* ── Palette "Labo Haute Performance" ── */
 
