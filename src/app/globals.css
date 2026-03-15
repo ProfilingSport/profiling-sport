@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Palette "Labo Haute Performance" ── */
+
+  /* Fond : Gris Charbon Mat */
+  --color-bg-primary: #151515;
+  --color-bg-secondary: #1a1a1d;
+  --color-bg-card: #212124;
+  --color-bg-card-hover: #2a2a2e;
+
+  /* Textes : Blanc Cassé / Perle + Gris Argent */
+  --color-text-primary: #fdfdfd;
+  --color-text-secondary: #a9a9a9;
+  --color-text-muted: #8d99ae;
+
+  /* Accent : Rouge Carmin */
+  --color-accent: #D90429;
+  --color-accent-glow: #D9042980;
+  --color-accent-deep: #C1121F;
+  --color-accent-light: #ef233c;
+
+  /* Alias de compatibilité (cyan-accent → rouge carmin) */
+  --color-cyan-accent: #D90429;
+  --color-cyan-glow: #D9042980;
+  --color-cyan-deep: #C1121F;
+
+  /* ── Typographie ── */
+  --font-sans: "Inter", "Roboto", "Montserrat", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Base ── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Glow effects ── */
+.glow-cyan {
+  box-shadow: 0 0 20px var(--color-accent-glow), 0 0 60px var(--color-accent-glow);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px var(--color-accent-glow);
+}
+
+.glow-border {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
+/* ── Gradient line ── */
+.gradient-line {
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  height: 1px;
+}
+
+/* ── Grid pattern background ── */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(217, 4, 41, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(217, 4, 41, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── Pulse animation for data points ── */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* ── Scan line effect ── */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent, rgba(217, 4, 41, 0.02), transparent);
+  height: 40px;
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Marquee (infinite scroll) ── */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee-scroll 25s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Accessibility: respect user's motion preferences ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-slow,
+  .marquee-track,
+  .scanline::after {
+    animation: none !important;
+  }
+
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

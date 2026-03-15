@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audit Complet — PRofiling</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: #151515;
+      color: #e2e8f0;
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* Header */
+    .header {
+      border-bottom: 1px solid rgba(217,4,41,0.3);
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .header h1 span { color: #D90429; }
+    .header .meta {
+      color: #64748b;
+      font-size: 14px;
+    }
+    .header .meta span { color: #94a3b8; }
+
+    /* Score overview */
+    .score-overview {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      background: #1a1a1d;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+    .global-score {
+      text-align: center;
+      min-width: 120px;
+    }
+    .global-score .number {
+      font-size: 56px;
+      font-weight: 800;
+      color: #D90429;
+      line-height: 1;
+    }
+    .global-score .label {
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+    .score-divider {
+      width: 1px;
+      height: 80px;
+      background: rgba(255,255,255,0.1);
+    }
+    .verdict { flex: 1; }
+    .verdict h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .verdict p {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      margin-top: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background: #1a1a1d;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    th {
+      background: #212124;
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #64748b;
+      font-weight: 600;
+    }
+    td {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      font-size: 14px;
+    }
+    tr:hover td { background: rgba(217,4,41,0.02); }
+
+    .score-cell {
+      font-weight: 700;
+      font-size: 16px;
+      width: 60px;
+      text-align: center;
+    }
+    .score-high { color: #10b981; }
+    .score-mid { color: #f59e0b; }
+    .score-low { color: #ef4444; }
+
+    .bar-cell { width: 140px; }
+    .bar-bg {
+      height: 6px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+    .bar-high { background: #10b981; }
+    .bar-mid { background: #f59e0b; }
+    .bar-low { background: #ef4444; }
+
+    .criteria-name {
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    .criteria-detail {
+      color: #64748b;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    /* Cards */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: #1a1a1d;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .card.full { grid-column: 1 / -1; }
+    .card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card h4 .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .card.good h4 .dot { background: #10b981; }
+    .card.warn h4 .dot { background: #f59e0b; }
+    .card.bad h4 .dot { background: #ef4444; }
+    .card p, .card li {
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .card ul li {
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+    .card ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: #D90429;
+      font-weight: bold;
+    }
+
+    /* Detail section */
+    .detail-section {
+      background: #1a1a1d;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .detail-section h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .detail-section .score-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-left: auto;
+    }
+    .detail-section .score-badge.high { background: rgba(16,185,129,0.15); color: #10b981; }
+    .detail-section .score-badge.mid { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .detail-section .score-badge.low { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .detail-section .subtitle {
+      color: #64748b;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .detail-section .col-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .detail-section .col-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .detail-section .col-label.green { color: #10b981; }
+    .detail-section .col-label.orange { color: #f59e0b; }
+    .detail-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .detail-section ul li {
+      padding: 5px 0;
+      padding-left: 16px;
+      position: relative;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .detail-section ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+    .detail-section .good-list li::before { color: #10b981; }
+    .detail-section .warn-list li::before { color: #f59e0b; }
+
+    /* Priority table */
+    .priority-critical { color: #ef4444; font-weight: 600; }
+    .priority-important { color: #f59e0b; font-weight: 600; }
+    .priority-nice { color: #64748b; font-weight: 600; }
+    td code {
+      background: rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #D90429;
+    }
+
+    /* Footer */
+    .report-footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      text-align: center;
+      color: #475569;
+      font-size: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .score-overview { flex-direction: column; text-align: center; }
+      .score-divider { width: 80px; height: 1px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .detail-section .col-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <h1><span>Audit Complet</span> — PRofiling</h1>
+      <p class="meta">
+        Stack : <span>Next.js 15.3 / React 19 / Tailwind CSS 4 / TypeScript</span> &nbsp;|&nbsp;
+        Date : <span>10 mars 2026</span> &nbsp;|&nbsp;
+        Analyse : <span>8 axes &bull; Code + Visuel + Build</span>
+      </p>
+    </div>
+
+    <!-- SCORE GLOBAL -->
+    <div class="score-overview">
+      <div class="global-score">
+        <div class="number">6.3</div>
+        <div class="label">Score global</div>
+      </div>
+      <div class="score-divider"></div>
+      <div class="verdict">
+        <h3>Design solide, fondamentaux production à finaliser</h3>
+        <p>
+          Le site affiche un design professionnel et un code bien structuré. Le build compile sans erreur (0 warning).
+          Les principaux axes d'amélioration concernent le SEO (pas d'Open Graph, pas de sitemap),
+          l'accessibilité (labels non liés, modale sans focus trap) et les finitions production
+          (formulaire non connecté, pas de favicon, Google Fonts non optimisé).
+          7 corrections critiques suffisent pour le rendre déployable.
+        </p>
+      </div>
+    </div>
+
+    <!-- TABLEAU DES SCORES -->
+    <div class="section-title">
+      <div class="icon" style="background:rgba(217,4,41,0.1);color:#D90429;">&#9776;</div>
+      Scores par catégorie
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Catégorie</th>
+          <th>Barre</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="criteria-name">Structure &amp; Architecture</div>
+            <div class="criteria-detail">Organisation des composants, séparation des responsabilités, config</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-high" style="width:80%"></div></div></td>
+          <td class="score-cell score-high">8/10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="criteria-name">Responsive &amp; UI/UX</div>
+            <div class="criteria-detail">Adaptation mobile/desktop, navigation, design system, parcours</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-high" style="width:80%"></div></div></td>
+          <td class="score-cell score-high">8/10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="criteria-name">Sécurité</div>
+            <div class="criteria-detail">Surface d'attaque, headers, formulaire, données exposées</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-mid" style="width:70%"></div></div></td>
+          <td class="score-cell score-mid">7/10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="criteria-name">Qualité du code</div>
+            <div class="criteria-detail">TypeScript, best practices, lisibilité, nommage, tests</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-mid" style="width:70%"></div></div></td>
+          <td class="score-cell score-mid">7/10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="criteria-name">Performance</div>
+            <div class="criteria-detail">Bundle size, chargement fonts, SSG, images, animations</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-mid" style="width:60%"></div></div></td>
+          <td class="score-cell score-mid">6/10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="criteria-name">SEO &amp; Metadata</div>
+            <div class="criteria-detail">OG tags, sitemap, robots.txt, structured data, canonical</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-low" style="width:50%"></div></div></td>
+          <td class="score-cell score-low">5/10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="criteria-name">Images &amp; Assets</div>
+            <div class="criteria-detail">Favicon, OG image, apple-touch-icon, formats optimisés</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-low" style="width:50%"></div></div></td>
+          <td class="score-cell score-low">5/10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="criteria-name">Accessibilité (a11y)</div>
+            <div class="criteria-detail">Labels, aria, contrastes, modale, focus trap, sémantique</div>
+          </td>
+          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill bar-low" style="width:40%"></div></div></td>
+          <td class="score-cell score-low">4/10</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- DÉTAIL PAR CATÉGORIE                    -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <div class="section-title">
+      <div class="icon" style="background:rgba(217,4,41,0.1);color:#D90429;">&#128269;</div>
+      Détail par catégorie
+    </div>
+
+    <!-- 1. Structure -->
+    <div class="detail-section">
+      <h3>
+        1. Structure &amp; Architecture
+        <span class="score-badge high">8/10</span>
+      </h3>
+      <p class="subtitle">9 composants bien découpés, build statique SSG, TypeScript strict</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li>Architecture propre : 1 page, 9 composants spécialisés</li>
+            <li><code>"use client"</code> utilisé uniquement sur les 3 composants interactifs</li>
+            <li>Alias <code>@/*</code> configuré, imports propres</li>
+            <li>Build statique (SSG) — pages pré-rendues</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À améliorer</div>
+          <ul class="warn-list">
+            <li>Footer contient le formulaire Contact — devrait être un composant séparé</li>
+            <li>Pas de <code>robots.txt</code> ni <code>sitemap.xml</code></li>
+            <li>Pas de <code>favicon.ico</code> dans <code>/public</code></li>
+            <li>Pas de page 404 personnalisée (<code>not-found.tsx</code>)</li>
+            <li>ESLint non configuré (pas de config à la racine)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. SEO -->
+    <div class="detail-section">
+      <h3>
+        2. SEO &amp; Metadata
+        <span class="score-badge low">5/10</span>
+      </h3>
+      <p class="subtitle">Title et description OK, mais pas d'Open Graph, pas de sitemap, pas de structured data</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li><code>lang="fr"</code> correctement défini</li>
+            <li>Title et meta description pertinents</li>
+            <li>Keywords ISAK / anthropométrie / sport</li>
+            <li>Un seul <code>&lt;h1&gt;</code>, hiérarchie correcte</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À améliorer</div>
+          <ul class="warn-list">
+            <li>Pas d'Open Graph (og:title, og:description, og:image)</li>
+            <li>Pas de Twitter Card</li>
+            <li>Pas de canonical URL</li>
+            <li>Pas de structured data JSON-LD (Schema.org)</li>
+            <li>Pas de <code>robots.txt</code> ni <code>sitemap.xml</code></li>
+            <li>Pas de favicon via metadata Next.js</li>
+            <li>Google Fonts via <code>&lt;link&gt;</code> au lieu de <code>next/font</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Performance -->
+    <div class="detail-section">
+      <h3>
+        3. Performance
+        <span class="score-badge mid">6/10</span>
+      </h3>
+      <p class="subtitle">Bundle 113 kB First Load — bon, mais fonts et animations à optimiser</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li>Build statique (SSG) — temps de réponse minimal</li>
+            <li>Bundle JS : 113 kB First Load (raisonnable)</li>
+            <li>Utilisation de <code>next/image</code> (optimisation auto)</li>
+            <li>Tailwind CSS v4 tree-shaking efficace</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À améliorer</div>
+          <ul class="warn-list">
+            <li>Google Fonts via <code>&lt;link&gt;</code> bloque le rendu — migrer vers <code>next/font/google</code></li>
+            <li>Animations CSS continues (<code>pulse-slow</code>, <code>scanline</code>) tournent hors viewport</li>
+            <li>SVG inline abondants dans le JS — pourraient être des fichiers séparés</li>
+            <li>Pas de <code>priority</code> sur les images above-the-fold</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Accessibilité -->
+    <div class="detail-section">
+      <h3>
+        4. Accessibilité (a11y)
+        <span class="score-badge low">4/10</span>
+      </h3>
+      <p class="subtitle">Problèmes multiples : labels, modale, aria, contrastes</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li><code>aria-label="Menu"</code> sur le bouton hamburger</li>
+            <li>Sémantique HTML correcte (<code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>)</li>
+            <li>Alt text sur les 2 images (About)</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À corriger</div>
+          <ul class="warn-list">
+            <li>Labels formulaire sans <code>htmlFor</code>/<code>id</code></li>
+            <li>Contraste <code>text-muted</code> (#8d99ae) sur #151515 : ~4.1:1 (limite AA)</li>
+            <li>Bouton menu sans <code>aria-expanded</code></li>
+            <li>Modale Dashboard : pas de focus trap, pas de <code>role="dialog"</code>, pas de fermeture Escape</li>
+            <li>SVG décoratives sans <code>aria-hidden="true"</code></li>
+            <li>Pas de skip link</li>
+            <li>Lien logo <code>href="#"</code> ne mène nulle part</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Responsive & UI/UX -->
+    <div class="detail-section">
+      <h3>
+        5. Responsive &amp; UI/UX
+        <span class="score-badge high">8/10</span>
+      </h3>
+      <p class="subtitle">Design cohérent, dark theme pro, navigation mobile fonctionnelle</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li>Grid responsive (1/2/3 cols selon breakpoint)</li>
+            <li>Menu hamburger mobile fonctionnel</li>
+            <li>Typography responsive (4xl → 5xl → 7xl)</li>
+            <li>Design system cohérent, accent rouge carmin unifié</li>
+            <li>CTAs bien visibles et contrastés</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À améliorer</div>
+          <ul class="warn-list">
+            <li>Menu mobile ne se ferme pas au clic extérieur</li>
+            <li>Pas de bouton scroll-to-top (page très longue)</li>
+            <li>Pas d'animations d'entrée au scroll</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Sécurité -->
+    <div class="detail-section">
+      <h3>
+        6. Sécurité
+        <span class="score-badge mid">7/10</span>
+      </h3>
+      <p class="subtitle">Surface d'attaque minimale (SSG), mais formulaire non branché</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li>Site statique — pas de route API, pas de BDD</li>
+            <li>Pas de données sensibles exposées</li>
+            <li>Pas de dépendances tierces côté client</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À améliorer</div>
+          <ul class="warn-list">
+            <li>Formulaire non connecté (juste <code>setSubmitted(true)</code>)</li>
+            <li>Pas de protection anti-spam (honeypot / CAPTCHA)</li>
+            <li>Pas de Content Security Policy dans <code>next.config.ts</code></li>
+            <li>Email en clair (susceptible au scraping)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Code Quality -->
+    <div class="detail-section">
+      <h3>
+        7. Qualité du Code
+        <span class="score-badge mid">7/10</span>
+      </h3>
+      <p class="subtitle">TypeScript strict, composants lisibles, mais nommage legacy et pas de tests</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li>TypeScript strict activé, 0 <code>any</code></li>
+            <li>Composants bien structurés et lisibles</li>
+            <li>Données config séparées du JSX</li>
+            <li>JSX propre et bien indenté</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À améliorer</div>
+          <ul class="warn-list">
+            <li>Classes <code>cyan-accent</code> = couleur rouge (#D90429) — nommage trompeur</li>
+            <li>Pas de fichier ESLint config à la racine</li>
+            <li>SVGs inline dans les données (mélange data/JSX)</li>
+            <li>Pas de tests unitaires ni e2e</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Images & Assets -->
+    <div class="detail-section">
+      <h3>
+        8. Images &amp; Assets
+        <span class="score-badge low">5/10</span>
+      </h3>
+      <p class="subtitle">2 images présentes, mais manque favicon, OG image, apple-touch-icon</p>
+      <div class="col-2">
+        <div>
+          <div class="col-label green">Points forts</div>
+          <ul class="good-list">
+            <li>2 images optimisées via <code>next/image</code></li>
+            <li>Alt text descriptifs sur les 2 images</li>
+          </ul>
+        </div>
+        <div>
+          <div class="col-label orange">À améliorer</div>
+          <ul class="warn-list">
+            <li>Pas de <code>favicon.ico</code></li>
+            <li>Pas d'<code>apple-touch-icon</code></li>
+            <li>Pas d'image Open Graph pour le partage social</li>
+            <li>Sources JPG — pourraient être optimisées en WebP/AVIF</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- PLAN D'ACTION PRIORISÉ                  -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <div class="section-title" style="margin-top:60px;">
+      <div class="icon" style="background:rgba(239,68,68,0.1);color:#ef4444;">&#9888;</div>
+      Plan d'action priorisé
+    </div>
+
+    <!-- Critiques -->
+    <h4 style="color:#ef4444; font-size:13px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px; margin-top:10px;">
+      &#9679; Critiques — Avant mise en production
+    </h4>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px;">#</th>
+          <th>Action</th>
+          <th>Fichier</th>
+          <th style="width:70px;">Priorité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Brancher le formulaire à un backend réel (Formspree, Resend...)</td>
+          <td><code>Footer.tsx</code></td>
+          <td class="priority-critical">Critique</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Migrer Google Fonts vers <code>next/font/google</code></td>
+          <td><code>layout.tsx</code></td>
+          <td class="priority-critical">Critique</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Ajouter Open Graph + Twitter Card metadata</td>
+          <td><code>layout.tsx</code></td>
+          <td class="priority-critical">Critique</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Ajouter <code>favicon.ico</code> + apple-touch-icon</td>
+          <td><code>/public</code></td>
+          <td class="priority-critical">Critique</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Associer labels aux inputs (<code>htmlFor</code> / <code>id</code>)</td>
+          <td><code>Footer.tsx</code></td>
+          <td class="priority-critical">Critique</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Ajouter <code>robots.txt</code> + <code>sitemap.xml</code></td>
+          <td><code>/public</code></td>
+          <td class="priority-critical">Critique</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Configurer ESLint à la racine du projet</td>
+          <td><code>eslint.config.mjs</code></td>
+          <td class="priority-critical">Critique</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Importants -->
+    <h4 style="color:#f59e0b; font-size:13px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px;">
+      &#9679; Importants — Qualité &amp; finitions
+    </h4>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px;">#</th>
+          <th>Action</th>
+          <th>Fichier</th>
+          <th style="width:70px;">Priorité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>8</td>
+          <td>Ajouter <code>aria-expanded</code> au bouton menu mobile</td>
+          <td><code>Navbar.tsx</code></td>
+          <td class="priority-important">Important</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Focus trap + <code>role="dialog"</code> + fermeture Escape sur la modale</td>
+          <td><code>Dashboard.tsx</code></td>
+          <td class="priority-important">Important</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Renommer <code>cyan-accent</code> → <code>accent</code> partout (cohérence nommage)</td>
+          <td><code>globals.css</code> + tous</td>
+          <td class="priority-important">Important</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>Ajouter structured data JSON-LD (Schema.org ProfessionalService)</td>
+          <td><code>layout.tsx</code></td>
+          <td class="priority-important">Important</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>Protection anti-spam : honeypot ou CAPTCHA sur le formulaire</td>
+          <td><code>Footer.tsx</code></td>
+          <td class="priority-important">Important</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>Créer une page 404 personnalisée</td>
+          <td><code>not-found.tsx</code></td>
+          <td class="priority-important">Important</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Nice-to-have -->
+    <h4 style="color:#64748b; font-size:13px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:12px;">
+      &#9679; Nice-to-have — Améliorations futures
+    </h4>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px;">#</th>
+          <th>Action</th>
+          <th style="width:70px;">Priorité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>14</td>
+          <td>Bouton scroll-to-top</td>
+          <td class="priority-nice">Nice</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>Animations d'entrée au scroll (IntersectionObserver)</td>
+          <td class="priority-nice">Nice</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>Fermeture du menu mobile au clic extérieur</td>
+          <td class="priority-nice">Nice</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>Extraire les SVG inline en composants Icon réutilisables</td>
+          <td class="priority-nice">Nice</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>Ajouter des tests e2e (Playwright)</td>
+          <td class="priority-nice">Nice</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- BUILD STATUS                             -->
+    <!-- ═══════════════════════════════════════ -->
+
+    <div class="section-title">
+      <div class="icon" style="background:rgba(16,185,129,0.1);color:#10b981;">&#10003;</div>
+      Statut du Build
+    </div>
+
+    <div class="cards-grid">
+      <div class="card good">
+        <h4><span class="dot"></span> Build Next.js</h4>
+        <ul>
+          <li>Compilation réussie en 10.0s</li>
+          <li>0 erreur, 0 warning</li>
+          <li>Page <code>/</code> : 11.5 kB (113 kB First Load JS)</li>
+          <li>Génération statique 4/4 pages OK</li>
+        </ul>
+      </div>
+      <div class="card good">
+        <h4><span class="dot"></span> Console navigateur</h4>
+        <ul>
+          <li>0 erreur console</li>
+          <li>0 warning console</li>
+          <li>0 erreur réseau</li>
+          <li>Toutes les sections s'affichent correctement</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      Rapport généré le 10 mars 2026 &nbsp;|&nbsp; PRofiling Audit Complet &nbsp;|&nbsp; Analyse automatisée 8 axes (code + visuel + build)
+    </div>
+
+  </div>
+</body>
+</html>
