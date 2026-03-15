@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://profiling-nutrition.fr";
+  const baseUrl = "https://profiling-sport.vercel.app";
 
   return [
     {

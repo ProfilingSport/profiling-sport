@@ -10,7 +10,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const BASE_URL = "https://profiling-nutrition.fr";
+const BASE_URL = "https://profiling-sport.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -18,13 +18,21 @@ export const metadata: Metadata = {
   description:
     "Audit clinique de composition corporelle par anthropométrie ISAK. Conseil en optimisation pour clubs professionnels et athlètes premium.",
   keywords: [
+    "Paul Rettien",
+    "PRofiling",
+    "profiling sport",
     "anthropométrie",
+    "anthropométrie sportive",
     "ISAK",
     "composition corporelle",
     "somatotype",
     "plis cutanés",
     "sport",
     "performance",
+    "Rouen",
+    "Normandie",
+    "audit corporel",
+    "nutrition du sport",
   ],
   openGraph: {
     type: "website",
@@ -67,7 +75,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "ProfessionalService",
               name: "PRofiling",
-              url: "https://profiling-nutrition.fr",
+              url: "https://profiling-sport.vercel.app",
               description:
                 "Audit clinique de composition corporelle par anthropométrie ISAK. Conseil en optimisation pour clubs professionnels et athlètes premium.",
               founder: {
