@@ -36,7 +36,7 @@ const faqs = [
   {
     question: "Réalisez-vous vous-même les prises de sang ?",
     answer:
-      "Non. Je vous fournis l'ordonnance exacte. Vous réalisez la prise de sang en laboratoire, et j'intègre ensuite vos résultats dans le Dashboard PRofiling pour croiser les données.",
+      "Non. Je vous fournis la liste précise des biomarqueurs à transmettre à votre médecin (ou à réaliser en laboratoire à vos frais). J'intègre ensuite vos résultats dans le Dashboard PRofiling pour croiser les données.",
   },
 ];
 

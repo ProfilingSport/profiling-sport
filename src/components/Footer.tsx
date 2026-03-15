@@ -176,6 +176,11 @@ export default function Footer() {
             Anthropométrie Sportive de Haut Niveau &mdash; Certifié ISAK Niveau 1
           </p>
         </div>
+
+        {/* Disclaimer légal */}
+        <p className="mt-6 text-[#555555] text-[10px] leading-relaxed text-center max-w-3xl mx-auto">
+          Avertissement : Les prestations proposées (profilage physiologique, anthropométrie ISAK, conseils nutritionnels) visent l&apos;optimisation de la performance sportive. Elles ne constituent pas un acte médical et ne se substituent en aucun cas à un avis, diagnostic ou traitement prescrit par un médecin.
+        </p>
       </div>
     </footer>
   );

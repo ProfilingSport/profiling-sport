@@ -68,7 +68,7 @@ const features = [
   {
     tag: "Biologie Sportive",
     title: "Monitoring Sanguin",
-    desc: "Intégration et analyse des biomarqueurs clés de la performance (transport d'oxygène, statut hormonal, inflammation). Croisement des données anthropométriques et sanguines pour un diagnostic complet du moteur physiologique.",
+    desc: "Intégration et analyse des biomarqueurs clés de la performance (transport d'oxygène, statut hormonal, inflammation). Croisement des données anthropométriques et sanguines pour un profilage complet du moteur physiologique.",
     visual: (
       <div className="relative w-full h-48 flex flex-col justify-center px-4">
         <div className="space-y-2">
@@ -310,7 +310,7 @@ function ExampleDashboard({ onClose }: { onClose: () => void }) {
             <div className="space-y-3">
               <div className="bg-bg-primary rounded-lg p-4 border-l-2 border-[#E11D48]">
                 <p className="text-text-primary text-sm font-semibold mb-1">🚨 Carence sévère en Vitamine D (11.08 ng/mL)</p>
-                <p className="text-text-secondary text-sm leading-relaxed">Taux critique nécessitant une supplémentation de charge immédiate. Impact direct sur la récupération musculaire, le risque de blessure et la fonction immunitaire. Recommandation : 100 000 UI dose de charge, puis 3 000–4 000 UI/jour en entretien. Contrôle à J+60. Objectif : &gt; 40 ng/mL.</p>
+                <p className="text-text-secondary text-sm leading-relaxed">Taux critique nécessitant une supplémentation de charge immédiate. Impact direct sur la récupération musculaire, le risque de blessure et la fonction immunitaire. Recommandation : Supplémentation journalière adaptée (ex: 2 000 à 4 000 UI/jour en gouttes) ou orientation vers le médecin du club pour prescription d'une dose de charge. Contrôle à J+60. Objectif : &gt; 40 ng/mL.</p>
               </div>
               <div className="bg-bg-primary rounded-lg p-4 border-l-2 border-[#F59E0B]">
                 <p className="text-text-primary text-sm font-semibold mb-1">⚠ Ferritine fonctionnellement basse (46 ng/mL)</p>
