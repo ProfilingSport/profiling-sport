@@ -14,7 +14,9 @@ import {
   SlidersHorizontal,
   UserRoundCog,
   Dumbbell,
+  ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 
 /* ───────────────────────── DATA ───────────────────────── */
 
@@ -203,7 +205,7 @@ export default function Services() {
           </div>
 
           {/* Desktop : horizontal */}
-          <div className="hidden md:block relative max-w-5xl mx-auto">
+          <div className="hidden md:block relative max-w-7xl mx-auto">
             {/* Ligne horizontale */}
             <div className="absolute top-8 left-0 right-0 h-px bg-white/10" />
             <div className="grid grid-cols-4 gap-6">
@@ -220,7 +222,7 @@ export default function Services() {
                       Étape {i + 1}
                     </span>
                     <h4 className="text-sm font-bold mb-2">{step.title}</h4>
-                    <p className="text-text-muted text-xs leading-relaxed">{step.desc}</p>
+                    <p className="text-white/60 text-[0.85rem] leading-relaxed">{step.desc}</p>
                   </div>
                 );
               })}
@@ -297,16 +299,18 @@ export default function Services() {
             {annexes.map((item) => {
               const Icon = item.icon;
               return (
-                <div
+                <Link
                   key={item.title}
-                  className="bg-bg-secondary/60 border border-white/5 rounded-xl p-8 flex flex-col items-center text-center"
+                  href="/athletes#offres"
+                  className="group relative bg-bg-secondary/60 border border-white/5 rounded-xl p-8 flex flex-col items-center text-center hover:border-white/20 transition-colors cursor-pointer block"
                 >
                   <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-4">
                     <Icon className="w-5 h-5 text-text-muted" />
                   </div>
                   <h4 className="text-sm font-bold mb-3">{item.title}</h4>
                   <p className="text-text-muted text-xs leading-relaxed">{item.desc}</p>
-                </div>
+                  <ArrowRight className="absolute bottom-4 right-4 w-4 h-4 text-white/20 group-hover:text-cyan-accent group-hover:translate-x-0.5 transition-all" />
+                </Link>
               );
             })}
           </div>

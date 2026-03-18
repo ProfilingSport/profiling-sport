@@ -56,7 +56,7 @@ export default function PricingCard({
         <div className={subtitle ? "mb-6" : "mb-6 mt-4"}>
           <p className="text-2xl font-bold text-cyan-accent">{price}</p>
           {priceNote && (
-            <p className="text-text-muted text-xs mt-1">{priceNote}</p>
+            <p className="text-white/50 text-sm mt-1">{priceNote}</p>
           )}
         </div>
 
