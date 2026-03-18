@@ -17,6 +17,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
+import ScrollReveal, { StaggerContainer, StaggerItem } from "./ScrollReveal";
 
 /* ───────────────────────── DATA ───────────────────────── */
 
@@ -107,7 +108,7 @@ export default function Services() {
       <div className="max-w-7xl mx-auto px-6">
 
         {/* ════════════════ 1. NOS OFFRES CLUBS ════════════════ */}
-        <div className="text-center mb-16">
+        <ScrollReveal className="text-center mb-16">
           <p className="text-cyan-accent text-sm font-medium tracking-widest uppercase mb-3">
             Nos offres
           </p>
@@ -118,80 +119,81 @@ export default function Services() {
           <p className="text-text-secondary max-w-2xl mx-auto">
             De l&apos;audit ponctuel à l&apos;externalisation complète de votre suivi morphologique.
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className="grid lg:grid-cols-2 gap-6 max-w-5xl mx-auto mb-32">
+        <StaggerContainer stagger={0.15} className="grid lg:grid-cols-2 gap-6 max-w-5xl mx-auto mb-32">
           {offers.map((offer) => (
-            <div
-              key={offer.name}
-              className={`relative bg-bg-card rounded-xl border overflow-hidden flex flex-col transition-all ${
-                offer.highlight
-                  ? "border-cyan-accent/30 glow-border"
-                  : "border-white/5 hover:border-white/10"
-              }`}
-            >
-              {offer.highlight && (
-                <div className="bg-cyan-accent text-bg-primary text-xs font-bold text-center py-1.5 tracking-widest uppercase">
-                  Recommandé
+            <StaggerItem key={offer.name}>
+              <div
+                className={`relative bg-bg-card rounded-xl border overflow-hidden flex flex-col transition-all h-full ${
+                  offer.highlight
+                    ? "border-cyan-accent/30 glow-border"
+                    : "border-white/5 hover:border-white/10"
+                }`}
+              >
+                {offer.highlight && (
+                  <div className="bg-cyan-accent text-bg-primary text-xs font-bold text-center py-1.5 tracking-widest uppercase">
+                    Recommandé
+                  </div>
+                )}
+
+                <div className="p-8 flex flex-col flex-1">
+                  <span
+                    className={`inline-block w-fit text-xs font-semibold tracking-widest uppercase px-2.5 py-1 rounded mb-4 ${
+                      offer.highlight
+                        ? "bg-cyan-accent/10 text-cyan-accent"
+                        : "bg-white/5 text-text-secondary"
+                    }`}
+                  >
+                    {offer.badge}
+                  </span>
+
+                  <h3 className="text-xl font-bold mb-1">{offer.name}</h3>
+
+                  <div className="mb-6 mt-4">
+                    <p className="text-2xl font-bold text-cyan-accent">{offer.price}</p>
+                    <p className="text-text-muted text-xs mt-1">{offer.priceNote}</p>
+                  </div>
+
+                  <div className="h-px bg-gradient-to-r from-transparent via-cyan-accent/30 to-transparent mb-6" />
+
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {offer.features.map((f) => (
+                      <li key={f} className="flex gap-3 text-sm">
+                        <Check className="w-4 h-4 text-cyan-accent shrink-0 mt-0.5" />
+                        <span className="text-text-secondary">{f}</span>
+                      </li>
+                    ))}
+                    {offer.bonus && (
+                      <li className="flex gap-3 text-sm">
+                        <Star className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5" />
+                        <span className="text-text-secondary">
+                          <span className="text-[#F59E0B] font-semibold">Bonus : </span>
+                          {offer.bonus}
+                        </span>
+                      </li>
+                    )}
+                  </ul>
+
+                  <a
+                    href="#contact"
+                    className={`block text-center py-3 rounded font-semibold text-sm transition-all ${
+                      offer.highlight
+                        ? "bg-cyan-accent text-bg-primary hover:bg-cyan-accent/90"
+                        : "border border-white/10 text-text-secondary hover:border-cyan-accent/30 hover:text-text-primary"
+                    }`}
+                  >
+                    Demander un devis
+                  </a>
                 </div>
-              )}
-
-              <div className="p-8 flex flex-col flex-1">
-                <span
-                  className={`inline-block w-fit text-xs font-semibold tracking-widest uppercase px-2.5 py-1 rounded mb-4 ${
-                    offer.highlight
-                      ? "bg-cyan-accent/10 text-cyan-accent"
-                      : "bg-white/5 text-text-secondary"
-                  }`}
-                >
-                  {offer.badge}
-                </span>
-
-                <h3 className="text-xl font-bold mb-1">{offer.name}</h3>
-
-                <div className="mb-6 mt-4">
-                  <p className="text-2xl font-bold text-cyan-accent">{offer.price}</p>
-                  <p className="text-text-muted text-xs mt-1">{offer.priceNote}</p>
-                </div>
-
-                <div className="h-px bg-gradient-to-r from-transparent via-cyan-accent/30 to-transparent mb-6" />
-
-                <ul className="space-y-3 mb-8 flex-1">
-                  {offer.features.map((f) => (
-                    <li key={f} className="flex gap-3 text-sm">
-                      <Check className="w-4 h-4 text-cyan-accent shrink-0 mt-0.5" />
-                      <span className="text-text-secondary">{f}</span>
-                    </li>
-                  ))}
-                  {offer.bonus && (
-                    <li className="flex gap-3 text-sm">
-                      <Star className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5" />
-                      <span className="text-text-secondary">
-                        <span className="text-[#F59E0B] font-semibold">Bonus : </span>
-                        {offer.bonus}
-                      </span>
-                    </li>
-                  )}
-                </ul>
-
-                <a
-                  href="#contact"
-                  className={`block text-center py-3 rounded font-semibold text-sm transition-all ${
-                    offer.highlight
-                      ? "bg-cyan-accent text-bg-primary hover:bg-cyan-accent/90"
-                      : "border border-white/10 text-text-secondary hover:border-cyan-accent/30 hover:text-text-primary"
-                  }`}
-                >
-                  Demander un devis
-                </a>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* ════════════════ 2. TIMELINE PROTOCOLE ════════════════ */}
         <div className="mb-32">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <p className="text-cyan-accent text-sm font-medium tracking-widest uppercase mb-3">
               Protocole
             </p>
@@ -202,18 +204,17 @@ export default function Services() {
             <p className="text-text-secondary max-w-2xl mx-auto">
               Un processus clé en main, intégré à votre planning sans le perturber.
             </p>
-          </div>
+          </ScrollReveal>
 
           {/* Desktop : horizontal */}
-          <div className="hidden md:block relative max-w-7xl mx-auto">
+          <StaggerContainer stagger={0.12} className="hidden md:grid grid-cols-4 gap-6 relative max-w-7xl mx-auto">
             {/* Ligne horizontale */}
             <div className="absolute top-8 left-0 right-0 h-px bg-white/10" />
-            <div className="grid grid-cols-4 gap-6">
-              {timeline.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <div key={step.title} className="relative flex flex-col items-center text-center">
-                    {/* Point lumineux */}
+            {timeline.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <StaggerItem key={step.title}>
+                  <div className="relative flex flex-col items-center text-center">
                     <div className="relative z-10 w-16 h-16 rounded-full bg-bg-card border border-cyan-accent/30 flex items-center justify-center mb-6">
                       <Icon className="w-6 h-6 text-cyan-accent" />
                       <div className="absolute inset-0 rounded-full bg-cyan-accent/5" />
@@ -224,32 +225,32 @@ export default function Services() {
                     <h4 className="text-sm font-bold mb-2">{step.title}</h4>
                     <p className="text-white/60 text-[0.85rem] leading-relaxed">{step.desc}</p>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                </StaggerItem>
+              );
+            })}
+          </StaggerContainer>
 
           {/* Mobile : vertical */}
           <div className="md:hidden relative pl-8">
-            {/* Ligne verticale */}
             <div className="absolute left-[1.15rem] top-0 bottom-0 w-px bg-white/10" />
             <div className="space-y-10">
               {timeline.map((step, i) => {
                 const Icon = step.icon;
                 return (
-                  <div key={step.title} className="relative flex gap-5">
-                    {/* Point */}
-                    <div className="relative z-10 shrink-0 w-10 h-10 -ml-8 rounded-full bg-bg-card border border-cyan-accent/30 flex items-center justify-center">
-                      <Icon className="w-4 h-4 text-cyan-accent" />
+                  <ScrollReveal key={step.title} delay={i * 0.1}>
+                    <div className="relative flex gap-5">
+                      <div className="relative z-10 shrink-0 w-10 h-10 -ml-8 rounded-full bg-bg-card border border-cyan-accent/30 flex items-center justify-center">
+                        <Icon className="w-4 h-4 text-cyan-accent" />
+                      </div>
+                      <div>
+                        <span className="text-cyan-accent text-xs font-semibold tracking-widest uppercase">
+                          Étape {i + 1}
+                        </span>
+                        <h4 className="text-sm font-bold mt-1 mb-1">{step.title}</h4>
+                        <p className="text-text-muted text-xs leading-relaxed">{step.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-cyan-accent text-xs font-semibold tracking-widest uppercase">
-                        Étape {i + 1}
-                      </span>
-                      <h4 className="text-sm font-bold mt-1 mb-1">{step.title}</h4>
-                      <p className="text-text-muted text-xs leading-relaxed">{step.desc}</p>
-                    </div>
-                  </div>
+                  </ScrollReveal>
                 );
               })}
             </div>
@@ -258,7 +259,7 @@ export default function Services() {
 
         {/* ════════════════ 3. POURQUOI ADOPTER LE PROTOCOLE ════════════════ */}
         <div className="mb-32">
-          <div className="text-center mb-16">
+          <ScrollReveal className="text-center mb-16">
             <p className="text-cyan-accent text-sm font-medium tracking-widest uppercase mb-3">
               Bénéfices
             </p>
@@ -266,29 +267,28 @@ export default function Services() {
               Pourquoi adopter le{" "}
               <span className="text-cyan-accent">protocole</span> ?
             </h2>
-          </div>
+          </ScrollReveal>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <StaggerContainer stagger={0.12} className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {advantages.map((item) => {
               const Icon = item.icon;
               return (
-                <div
-                  key={item.title}
-                  className="bg-bg-card border border-white/5 rounded-xl p-8 hover:border-white/10 transition-all"
-                >
-                  <div className="w-12 h-12 rounded-lg bg-cyan-accent/10 flex items-center justify-center mb-5">
-                    <Icon className="w-5 h-5 text-cyan-accent" />
+                <StaggerItem key={item.title}>
+                  <div className="bg-bg-card border border-white/5 rounded-xl p-8 hover:border-white/10 transition-all h-full">
+                    <div className="w-12 h-12 rounded-lg bg-cyan-accent/10 flex items-center justify-center mb-5">
+                      <Icon className="w-5 h-5 text-cyan-accent" />
+                    </div>
+                    <h4 className="text-base font-bold mb-3">{item.title}</h4>
+                    <p className="text-text-muted text-sm leading-relaxed">{item.desc}</p>
                   </div>
-                  <h4 className="text-base font-bold mb-3">{item.title}</h4>
-                  <p className="text-text-muted text-sm leading-relaxed">{item.desc}</p>
-                </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
         </div>
 
         {/* ════════════════ 4. SOLUTIONS ANNEXES ════════════════ */}
-        <div>
+        <ScrollReveal>
           <div className="text-center mb-10">
             <p className="text-text-muted text-sm font-medium tracking-widest uppercase mb-3">
               Solutions annexes
@@ -314,7 +314,7 @@ export default function Services() {
               );
             })}
           </div>
-        </div>
+        </ScrollReveal>
 
       </div>
     </section>

@@ -25,7 +25,7 @@ export default function PricingCard({
 }: PricingCardProps) {
   return (
     <div
-      className={`relative bg-bg-card rounded-xl border overflow-hidden flex flex-col ${
+      className={`relative bg-bg-card rounded-xl border overflow-hidden flex flex-col h-full ${
         highlight
           ? "border-cyan-accent/30 glow-border"
           : "border-white/5 hover:border-white/10"

@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import ScrollReveal, { StaggerContainer, StaggerItem } from "./ScrollReveal";
 
 const features = [
   {
@@ -60,14 +63,12 @@ export default function WhyIsak() {
           backgroundSize: "40px 40px",
         }}
       />
-      {/* Subtle radial gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-accent/[0.02] via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* ── Left column: Text ── */}
-          <div>
-            {/* Label */}
+          <ScrollReveal>
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-cyan-accent" />
               <p className="text-cyan-accent text-xs font-medium tracking-[0.3em] uppercase">
@@ -75,68 +76,62 @@ export default function WhyIsak() {
               </p>
             </div>
 
-            {/* Title */}
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 leading-tight">
               Bien plus qu&apos;une simple{" "}
               <span className="text-cyan-accent">mesure</span>.
             </h2>
 
-            {/* Subtitle */}
             <p className="text-text-secondary text-lg mb-10 leading-relaxed">
               Pourquoi le standard ISAK est la référence mondiale.
             </p>
 
-            {/* Feature list — no cards */}
-            <div className="space-y-8">
+            <StaggerContainer stagger={0.1} className="space-y-8">
               {features.map((feature, i) => (
-                <div key={feature.title} className="flex gap-4">
-                  {/* Icon circle */}
-                  <div className="shrink-0 w-10 h-10 rounded-lg bg-cyan-accent/10 flex items-center justify-center text-cyan-accent">
-                    {feature.icon}
+                <StaggerItem key={feature.title}>
+                  <div className="flex gap-4">
+                    <div className="shrink-0 w-10 h-10 rounded-lg bg-cyan-accent/10 flex items-center justify-center text-cyan-accent">
+                      {feature.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold mb-1">
+                        <span className="text-cyan-accent mr-2 font-mono text-xs opacity-50">
+                          0{i + 1}
+                        </span>
+                        {feature.title}
+                      </h3>
+                      <p className="text-text-secondary text-sm leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
-
-                  {/* Text */}
-                  <div>
-                    <h3 className="text-base font-semibold mb-1">
-                      <span className="text-cyan-accent mr-2 font-mono text-xs opacity-50">
-                        0{i + 1}
-                      </span>
-                      {feature.title}
-                    </h3>
-                    <p className="text-text-secondary text-sm leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
-          </div>
+            </StaggerContainer>
+          </ScrollReveal>
 
           {/* ── Right column: Image ── */}
-          <div className="relative max-w-sm mx-auto lg:max-w-md">
-            <div className="rounded-2xl bg-[#0a0a0a] p-3 relative" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)" }}>
-              {/* Harpenden caliper photo */}
-              <Image
-                src="/images/Harpenden.jpg"
-                alt="Pince Harpenden — Instrument de mesure ISAK"
-                width={480}
-                height={640}
-                priority
-                className="w-full h-auto block rounded-xl"
-              />
+          <ScrollReveal delay={0.2} variant="scale-in">
+            <div className="relative max-w-sm mx-auto lg:max-w-md">
+              <div className="rounded-2xl bg-[#0a0a0a] p-3 relative" style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)" }}>
+                <Image
+                  src="/images/Harpenden.jpg"
+                  alt="Pince Harpenden — Instrument de mesure ISAK"
+                  width={480}
+                  height={640}
+                  priority
+                  className="w-full h-auto block rounded-xl"
+                />
+                <div className="absolute inset-3 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none rounded-xl" />
+              </div>
 
-              {/* Subtle dark overlay for depth */}
-              <div className="absolute inset-3 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none rounded-xl" />
+              <div className="mt-4 flex items-center gap-2 justify-end">
+                <div className="h-px w-6 bg-cyan-accent/30" />
+                <span className="text-[10px] text-text-secondary tracking-widest uppercase">
+                  Protocole ISAK — 15 points de mesure
+                </span>
+              </div>
             </div>
-
-            {/* Small data label under image */}
-            <div className="mt-4 flex items-center gap-2 justify-end">
-              <div className="h-px w-6 bg-cyan-accent/30" />
-              <span className="text-[10px] text-text-secondary tracking-widest uppercase">
-                Protocole ISAK — 15 points de mesure
-              </span>
-            </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
