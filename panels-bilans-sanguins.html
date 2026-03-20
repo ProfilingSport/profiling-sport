@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panels Bilans Biologiques — PRofiling</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  :root {
+    --bg:#080808;--bg-card:#0c0c0e;--bg-sec:#0a0a0c;--cyan:#00E5FF;--red:#D90429;--green:#10B981;--amber:#F59E0B;--purple:#8B5CF6;
+    --orange:#F97316;--blue:#3B82F6;
+    --txt:#FFF;--txt2:#A0A0A0;--muted:#666;--border:rgba(255,255,255,.06);
+    --gold:#FFD700;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .ctn{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  .hero{padding:80px 0 50px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,229,255,.04) 0%,transparent 70%);pointer-events:none}
+  .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.05);border-radius:50px;padding:6px 16px;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:24px}
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+  h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;line-height:1.2;margin-bottom:16px}
+  h1 span,.hl{color:var(--cyan)}
+  .hero p{color:var(--txt2);font-size:1.05rem;max-width:780px;margin:0 auto}
+  h2{font-size:1.6rem;font-weight:700;margin-bottom:20px}
+  h3{font-size:1.15rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+
+  .panel-nav{display:flex;justify-content:center;gap:12px;margin:40px 0 30px;flex-wrap:wrap}
+  .panel-nav a{text-decoration:none;padding:12px 24px;border-radius:12px;font-size:.85rem;font-weight:600;transition:.3s;border:1px solid var(--border);color:var(--txt2);background:var(--bg-card)}
+  .panel-nav a:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+  .panel-nav .p1{border-color:var(--green);color:var(--green)}
+  .panel-nav .p2{border-color:var(--blue);color:var(--blue)}
+  .panel-nav .p3{border-color:var(--purple);color:var(--purple)}
+  .panel-nav .p4{border-color:var(--gold);color:var(--gold)}
+
+  .principe{max-width:700px;margin:0 auto 40px;text-align:center;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px}
+  .principe p{color:var(--txt2);font-size:.9rem;margin:0}
+  .principe strong{color:var(--cyan)}
+
+  .legend{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:.82rem}
+  .leg-nabm{width:10px;height:10px;border-radius:3px;background:var(--green)}
+  .leg-hn{width:10px;height:10px;border-radius:3px;background:var(--orange)}
+  .leg-labo{width:10px;height:10px;border-radius:3px;background:var(--red)}
+
+  section{padding:50px 0;border-bottom:1px solid var(--border)}
+
+  .panel-section{position:relative}
+  .panel-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:30px;padding:28px;border-radius:16px;border:1px solid var(--border);background:var(--bg-card)}
+  .panel-title-wrap{display:flex;align-items:center;gap:16px}
+  .panel-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+  .panel-title h2{margin-bottom:2px;font-size:1.4rem}
+  .panel-title p{color:var(--txt2);font-size:.9rem;margin:0}
+  .panel-price{text-align:right}
+  .panel-price .price{font-size:2.4rem;font-weight:800}
+  .panel-price .note{font-size:.75rem;color:var(--muted)}
+
+  .p-green .panel-icon{background:rgba(16,185,129,.12);color:var(--green)}
+  .p-green .price{color:var(--green)}
+  .p-green .panel-header{border-color:rgba(16,185,129,.15)}
+  .p-blue .panel-icon{background:rgba(59,130,246,.12);color:var(--blue)}
+  .p-blue .price{color:var(--blue)}
+  .p-blue .panel-header{border-color:rgba(59,130,246,.15)}
+  .p-purple .panel-icon{background:rgba(139,92,246,.12);color:var(--purple)}
+  .p-purple .price{color:var(--purple)}
+  .p-purple .panel-header{border-color:rgba(139,92,246,.15)}
+  .p-gold .panel-icon{background:rgba(255,215,0,.12);color:var(--gold)}
+  .p-gold .price{color:var(--gold)}
+  .p-gold .panel-header{border-color:rgba(255,215,0,.15)}
+
+  .marker-table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:.84rem}
+  .marker-table thead{background:rgba(255,255,255,.03)}
+  .marker-table th{text-align:left;padding:10px 14px;color:var(--cyan);font-weight:600;font-size:.73rem;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border)}
+  .marker-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+  .marker-table tr:hover{background:rgba(255,255,255,.015)}
+  .marker-name{font-weight:600;color:var(--txt)}
+  .marker-sub{color:var(--txt2);font-size:.78rem;display:block;margin-top:2px}
+  .norm-gen{color:var(--txt2)}
+  .norm-sport{color:var(--cyan);font-weight:500}
+  .tag-nabm{display:inline-block;background:rgba(16,185,129,.12);color:var(--green);font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:4px}
+  .tag-hn{display:inline-block;background:rgba(249,115,22,.12);color:var(--orange);font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:4px}
+  .tag-labo{display:inline-block;background:rgba(217,4,41,.12);color:var(--red);font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:4px}
+  .urine-tag{display:inline-block;background:rgba(139,92,246,.12);color:var(--purple);font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:4px}
+  .prix-hn{font-weight:700;color:var(--orange);font-size:.82rem}
+
+  .cost-box{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px}
+  .cost-col h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+  .cost-col ul{list-style:none;padding:0}
+  .cost-col li{font-size:.82rem;color:var(--txt2);padding:3px 0;display:flex;justify-content:space-between}
+  .cost-col li span{font-weight:600}
+  .cost-col.nabm h4{color:var(--green)}
+  .cost-col.nabm li span{color:var(--green)}
+  .cost-col.hn h4{color:var(--orange)}
+  .cost-col.hn li span{color:var(--orange)}
+  .cost-total{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-weight:700}
+
+  .justif{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-top:20px}
+  .justif h3{font-size:1rem;margin-bottom:12px}
+  .justif p{color:var(--txt2);font-size:.9rem;margin-bottom:10px}
+  .justif ul{list-style:none;padding:0}
+  .justif li{color:var(--txt2);font-size:.88rem;padding:6px 0;padding-left:20px;position:relative}
+  .justif li::before{content:'→';position:absolute;left:0;color:var(--cyan)}
+  .justif .business-angle{margin-top:16px;padding:16px;background:rgba(0,229,255,.04);border-radius:10px;border-left:3px solid var(--cyan)}
+  .justif .business-angle h4{color:var(--cyan);margin-bottom:6px;font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
+  .justif .business-angle p{color:var(--txt2);font-size:.85rem;margin:0}
+
+  .compare-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+  .compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+  .compare-card h4{font-size:.85rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+  .compare-card .c-price{font-size:1.8rem;font-weight:800;margin-bottom:2px}
+  .compare-card .c-sub{color:var(--muted);font-size:.7rem;margin-bottom:10px}
+  .compare-card .c-count{color:var(--txt2);font-size:.8rem;margin-bottom:12px}
+  .compare-card ul{list-style:none;text-align:left;padding:0}
+  .compare-card li{color:var(--txt2);font-size:.78rem;padding:4px 0;border-bottom:1px solid var(--border)}
+  .compare-card li:last-child{border:none}
+  .cc-green{border-color:rgba(16,185,129,.2)}.cc-green h4,.cc-green .c-price{color:var(--green)}
+  .cc-blue{border-color:rgba(59,130,246,.2)}.cc-blue h4,.cc-blue .c-price{color:var(--blue)}
+  .cc-purple{border-color:rgba(139,92,246,.2)}.cc-purple h4,.cc-purple .c-price{color:var(--purple)}
+  .cc-gold{border-color:rgba(255,215,0,.2)}.cc-gold h4,.cc-gold .c-price{color:var(--gold)}
+
+  .detect-table{width:100%;border-collapse:collapse;font-size:.82rem;margin:20px 0}
+  .detect-table th{padding:10px 12px;background:rgba(255,255,255,.03);color:var(--cyan);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;text-align:center;border-bottom:1px solid var(--border)}
+  .detect-table th:first-child{text-align:left}
+  .detect-table td{padding:8px 12px;border-bottom:1px solid var(--border);text-align:center}
+  .detect-table td:first-child{text-align:left;font-weight:500;color:var(--txt)}
+  .detect-yes{color:var(--green);font-weight:700}
+  .detect-partial{color:var(--amber);font-weight:600}
+  .detect-no{color:var(--muted)}
+
+  footer{padding:40px 0;text-align:center;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border)}
+  footer a{color:var(--cyan);text-decoration:none}
+
+  .note-box{background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.15);border-radius:12px;padding:18px;margin:20px 0}
+  .note-box p{color:var(--txt2);font-size:.85rem;margin:0}
+  .note-box strong{color:var(--orange)}
+  .note-green{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15)}
+  .note-green strong{color:var(--green)}
+
+  .new-tag{display:inline-block;background:rgba(0,229,255,.1);color:var(--cyan);font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px;margin-left:6px;vertical-align:middle;letter-spacing:.05em}
+
+  @media(max-width:900px){
+    .compare-grid{grid-template-columns:repeat(2,1fr)}
+    .panel-header{flex-direction:column;text-align:center}
+    .panel-price{text-align:center}
+    .marker-table{font-size:.78rem}
+    .marker-table th,.marker-table td{padding:8px 10px}
+    .cost-box{grid-template-columns:1fr}
+  }
+  @media(max-width:600px){
+    .compare-grid{grid-template-columns:1fr}
+    .panel-nav{flex-direction:column;align-items:center}
+    .detect-table{font-size:.7rem}
+    .detect-table th,.detect-table td{padding:6px 8px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="ctn">
+    <div class="badge"><span class="dot"></span>Offre Bilans Biologiques</div>
+    <h1>4 Panels pour <span>Optimiser</span><br>la Performance Sportive</h1>
+    <p>Sélection des marqueurs sanguins et urinaires les plus pertinents, à 4 niveaux de budget. Le reste à charge correspond uniquement aux analyses <strong style="color:var(--orange)">hors nomenclature</strong>. Avec une ordonnance, toutes les analyses <strong style="color:var(--green)">NABM sont gratuites</strong> — on les maximise donc dans chaque panel.</p>
+
+    <div class="panel-nav">
+      <a href="#panel1" class="p1">Essentiel — ~37€</a>
+      <a href="#panel2" class="p2">Performance — ~85€</a>
+      <a href="#panel3" class="p3">Expert — ~231€</a>
+      <a href="#panel4" class="p4">Élite — ~456€</a>
+    </div>
+
+    <div class="principe">
+      <p><strong>Principe clé :</strong> chaque panel maximise les analyses NABM (remboursées = 0€ pour le patient). Le budget ne contrôle que les analyses hors nomenclature. Résultat : même le Panel Essentiel à ~37€ contient déjà 11 analyses grâce aux NABM gratuites.</p>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="leg-nabm"></span> <span style="color:var(--green)">NABM — Remboursé = 0€</span></div>
+      <div class="legend-item"><span class="leg-hn"></span> <span style="color:var(--orange)">Hors nomenclature — Payant</span></div>
+      <div class="legend-item"><span class="leg-labo"></span> <span style="color:var(--red)">Labo spécialisé requis</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     PANEL 1 : ESSENTIEL — ~37€ de reste à charge
+     ===================================================== -->
+<section id="panel1" class="panel-section p-green">
+  <div class="ctn">
+    <div class="panel-header">
+      <div class="panel-title-wrap">
+        <div class="panel-icon">🩸</div>
+        <div class="panel-title">
+          <h2>Panel 1 — ESSENTIEL</h2>
+          <p>11 analyses · 8 NABM gratuites + 3 HN payantes · Labo standard</p>
+        </div>
+      </div>
+      <div class="panel-price">
+        <div class="price">~37€</div>
+        <div class="note">Reste à charge (HN uniquement)</div>
+      </div>
+    </div>
+
+    <table class="marker-table">
+      <thead>
+        <tr>
+          <th>Marqueur</th>
+          <th>Rôle & Intérêt</th>
+          <th>Normes Gén. / Sportif</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- NABM GRATUITES -->
+        <tr>
+          <td>
+            <span class="marker-name">NFS (Hémogramme complet)</span>
+            <span class="marker-sub">Hb, Hct, VGM, leucocytes, plaquettes</span>
+          </td>
+          <td>Détecte l'anémie (hémolyse mécanique en endurance), l'immunodépression (leucopénie de surentraînement). Photographie de base de l'état de santé.</td>
+          <td>
+            <span class="norm-gen">Hb — H : 13.0–17.5 · F : 12.0–16.0 g/dL</span><br>
+            <span class="norm-sport">Sportif — H : 14.5–17.0 · F : 13.0–15.5</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Ferritine + Fer sérique + CST</span>
+            <span class="marker-sub">Bilan martial complet</span>
+          </td>
+          <td>Bilan martial complet dès le Panel 1. Ferritine = réserves. CST = disponibilité fonctionnelle. CST &lt; 20% = carence fonctionnelle même si ferritine "normale" (réactant de phase aiguë). 30-50% des athlètes féminines en carence.</td>
+          <td>
+            <span class="norm-gen">Ferritine — H : 20–300 · F : 10–200 ng/mL · CST : 20–45%</span><br>
+            <span class="norm-sport">Ferritine > 50 (ACSM), idéal 80–150 · CST > 25%</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">CRP ultrasensible</span>
+            <span class="marker-sub">Inflammation systémique</span>
+          </td>
+          <td>Inflammation chronique de bas grade = signe précoce de surentraînement. Essentiel pour contextualiser tous les autres résultats (ferritine faussée si inflammation).</td>
+          <td>
+            <span class="norm-gen">&lt; 5 mg/L</span><br>
+            <span class="norm-sport">Sportif au repos : &lt; 1.0 mg/L</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">CK (Créatine Kinase)</span>
+            <span class="marker-sub">Dommage musculaire</span>
+          </td>
+          <td>Quantifie la charge mécanique résiduelle. CK chroniquement > 1000 U/L au repos = surentraînement. Permet de calibrer la charge d'entraînement.</td>
+          <td>
+            <span class="norm-gen">H : 30–200 · F : 25–170 U/L</span><br>
+            <span class="norm-sport">Sportif — H : 82–1 083 · F : 47–513 U/L</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Testostérone totale</span>
+            <span class="marker-sub">Hormone anabolique majeure</span>
+          </td>
+          <td>Régule synthèse protéique, densité osseuse, motivation. Sa chute = signe précoce de surentraînement et RED-S. Combinée au cortisol → ratio T/C, gold standard ECSS/ACSM.</td>
+          <td>
+            <span class="norm-gen">H : 2.5–10.0 · F : 0.15–0.70 ng/mL</span><br>
+            <span class="norm-sport">H > 5.0 ng/mL · H &lt; 3.0 = investigation</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Cortisol (matin, 8h)</span>
+            <span class="marker-sub">Hormone du stress · Axe HPA</span>
+          </td>
+          <td>Hormone catabolique. Élevé = stress/surentraînement précoce. Effondré = burnout. <strong>Ratio T/C = Testo (nmol/L) / Cortisol (nmol/L)</strong> : seuil critique &lt; 0.035 ou chute > 30% vs baseline.</td>
+          <td>
+            <span class="norm-gen">5–25 µg/dL = 138–690 nmol/L</span><br>
+            <span class="norm-sport">10–18 µg/dL · <strong>Ratio T/C > 0.035</strong></span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">TSH</span>
+            <span class="marker-sub">Dépistage thyroïdien</span>
+          </td>
+          <td>Régule métabolisme basal, thermogenèse, lipolyse. TSH élevée = hypothyroïdie subclinique (fatigue, prise de poids). TSH + T3 basses en surentraînement/RED-S = économie d'énergie.</td>
+          <td>
+            <span class="norm-gen">0.4–4.0 mUI/L</span><br>
+            <span class="norm-sport">1.0–2.5 mUI/L</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Glycémie à jeun</span>
+            <span class="marker-sub">Régulation glucidique</span>
+          </td>
+          <td>Dépiste troubles de glycorégulation et déficit énergétique (RED-S : glycémie basse chronique). Coûte rien, apporte une information utile de base.</td>
+          <td>
+            <span class="norm-gen">0.70–1.10 g/L</span><br>
+            <span class="norm-sport">0.80–0.95 g/L · &lt; 0.70 = hypoglycémie</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <!-- HN PAYANTES -->
+        <tr>
+          <td>
+            <span class="marker-name">Vitamine D (25-OH)</span>
+            <span class="marker-sub">Immunité, os, muscle</span>
+          </td>
+          <td>56% des athlètes insuffisants en hiver. Impacte immunité, force musculaire, densité osseuse. Fracture de stress ×3.6 si carence.</td>
+          <td>
+            <span class="norm-gen">30–100 ng/mL · &lt; 20 = carence</span><br>
+            <span class="norm-sport">40–60 ng/mL · &lt; 30 = risque blessure</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~9€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Zinc sérique</span>
+            <span class="marker-sub">Cofacteur SOD, Δ6-désaturase, testostérone, immunité</span>
+          </td>
+          <td>Cofacteur de SOD1, Δ6-désaturase (oméga-3), testostérone, immunité. 25-30% des sportifs en carence subclinique. Zinc bas = effet domino sur toutes les voies.</td>
+          <td>
+            <span class="norm-gen">H : 70–120 · F : 66–110 µg/dL</span><br>
+            <span class="norm-sport">> 80 µg/dL · &lt; 70 = carence</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~12€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Magnésium érythrocytaire</span>
+            <span class="marker-sub">Mg intracellulaire (pas le sérique !)</span>
+          </td>
+          <td>Le Mg sérique = 1% du Mg total. Le Mg érythrocytaire est fiable. Cofacteur > 300 enzymes (Δ6-désaturase, ATP-Mg, SAM). Carence = crampes, insomnie, irritabilité, baisse de force.</td>
+          <td>
+            <span class="norm-gen">1.65–2.65 mmol/L</span><br>
+            <span class="norm-sport">> 2.0 mmol/L · Ne PAS doser le Mg sérique seul</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~16€</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cost-box">
+      <div class="cost-col nabm">
+        <h4>NABM Remboursé — 0€</h4>
+        <ul>
+          <li>NFS complet <span>0€</span></li>
+          <li>Ferritine + Fer + CST <span>0€</span></li>
+          <li>CRP ultrasensible <span>0€</span></li>
+          <li>CK <span>0€</span></li>
+          <li>Testostérone totale <span>0€</span></li>
+          <li>Cortisol matin <span>0€</span></li>
+          <li>TSH <span>0€</span></li>
+          <li>Glycémie à jeun <span>0€</span></li>
+        </ul>
+      </div>
+      <div class="cost-col hn">
+        <h4>Hors Nomenclature — Payant</h4>
+        <ul>
+          <li>Vitamine D (25-OH) <span>~9€</span></li>
+          <li>Zinc sérique <span>~12€</span></li>
+          <li>Magnésium érythrocytaire <span>~16€</span></li>
+        </ul>
+        <div class="cost-total" style="color:var(--orange)">
+          <span>TOTAL RESTE À CHARGE</span>
+          <span>~37€</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box note-green">
+      <p><strong>Prélèvement :</strong> Matin entre 7h et 9h, à jeun, au repos (pas d'entraînement la veille au soir) pour que Cortisol et Testostérone soient interprétables. <strong>Labo :</strong> Tout est réalisable en labo standard. Le Mg érythrocytaire est parfois envoyé en sous-traitance (vérifier disponibilité).</p>
+    </div>
+
+    <div class="justif">
+      <h3>Pourquoi ce panel est optimal à ~37€ de reste à charge</h3>
+      <p>Pour ~37€, ce panel contient <strong>11 analyses</strong> grâce à la maximisation des NABM gratuites. Il couvre déjà :</p>
+      <ul>
+        <li><strong>Bilan martial complet</strong> (NFS + Ferritine + Fer/CST) — pas juste la ferritine, le CST différencie carence vraie vs inflammation</li>
+        <li><strong>Axe anabolique/catabolique</strong> (Testostérone + Cortisol → ratio T/C) — le gold standard du surentraînement, et c'est GRATUIT</li>
+        <li><strong>Dépistage thyroïdien</strong> (TSH) — gratuit, indispensable</li>
+        <li><strong>Carences minérales clés</strong> (Vit D + Zinc + Mg érythrocytaire) — cofacteurs de > 600 enzymes. Le Mg érythrocytaire fait la différence vs la concurrence</li>
+        <li><strong>Inflammation + Muscle + Glycémie</strong> (CRP + CK + Glycémie) — tous gratuits, contextualisent tout le reste</li>
+      </ul>
+      <div class="business-angle">
+        <h4>Angle business PRofiling</h4>
+        <p>Un panel de 11 analyses pour ~37€ de reste à charge, c'est imbattable. Le fait de pouvoir calculer le ratio T/C dès le Panel Essentiel est un argument massue — aucun diététicien classique ne propose ça à ce prix. Produit d'appel idéal : 80%+ des sportifs auront au moins une anomalie. Intégrable dans l'Audit Flash (55€/joueur) ou l'Audit Individuel (75€). Taux de conversion vers Panel 2 ou 3 estimé à 40-60%.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PANEL 2 : PERFORMANCE — ~85€ de reste à charge
+     ===================================================== -->
+<section id="panel2" class="panel-section p-blue">
+  <div class="ctn">
+    <div class="panel-header">
+      <div class="panel-title-wrap">
+        <div class="panel-icon">⚡</div>
+        <div class="panel-title">
+          <h2>Panel 2 — PERFORMANCE</h2>
+          <p>20 analyses · 14 NABM + 6 HN · Méthylation + métabolisme + micronutriments · Labo standard</p>
+        </div>
+      </div>
+      <div class="panel-price">
+        <div class="price">~85€</div>
+        <div class="note">Reste à charge (HN uniquement)</div>
+      </div>
+    </div>
+
+    <table class="marker-table">
+      <thead>
+        <tr>
+          <th>Marqueur</th>
+          <th>Rôle & Intérêt</th>
+          <th>Normes Gén. / Sportif</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="marker-name">Panel Essentiel complet</span><span class="marker-sub">11 analyses (8 NABM + 3 HN)</span></td>
+          <td colspan="2" style="color:var(--green);text-align:center">✓ Inclus — voir Panel 1</td>
+          <td><span class="tag-nabm">8 × 0€</span><br><span class="tag-hn">3 × ~37€</span></td>
+        </tr>
+        <!-- NOUVELLES NABM -->
+        <tr>
+          <td>
+            <span class="marker-name">T3 libre</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Hormone thyroïdienne active</span>
+          </td>
+          <td>T3L = hormone biologiquement active. TSH normale + T3 basse = "syndrome basse T3" = RED-S ou surentraînement avancé (économie d'énergie). Indispensable pour compléter la TSH du Panel 1.</td>
+          <td>
+            <span class="norm-gen">2.3–4.2 pg/mL</span><br>
+            <span class="norm-sport">> 3.0 pg/mL · ↓ T3 + TSH ok = syndrome basse T3</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">B12 + Folates (B9)</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Cycle de méthylation</span>
+          </td>
+          <td>B12 = cofacteur méthionine synthase. B9 = cofacteur MTHFR. Combinés à l'homocystéine, ils expliquent POURQUOI elle est élevée (carence B12 ? B9 ?). Carence B12 fréquente chez végétariens. B9 critique si contraception orale.</td>
+          <td>
+            <span class="norm-gen">B12 : 200–900 pg/mL · B9 : 3–17 ng/mL</span><br>
+            <span class="norm-sport">B12 : 400–800 · B9 > 8 ng/mL</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">ASAT / ALAT / GGT</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Bilan hépatique</span>
+          </td>
+          <td>Chez le sportif, ASAT élevées = souvent musculaire (pas hépatique). GGT normale = confirmé musculaire. GGT élevée = atteinte hépatique. Évite les faux diagnostics.</td>
+          <td>
+            <span class="norm-gen">ASAT/ALAT : &lt; 35-45 U/L · GGT — H : &lt; 55 · F : &lt; 38</span><br>
+            <span class="norm-sport">ASAT sportif : &lt; 50 ok · GGT &lt; 30 U/L</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Insuline à jeun</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">→ HOMA-IR avec la glycémie du Panel 1</span>
+          </td>
+          <td>HOMA-IR = (Glycémie × Insuline) / 22.5. Dépiste résistance à l'insuline. Insuline basse + glycémie basse = excellente sensibilité (endurance). Combiné à la glycémie du Panel 1 pour le calcul.</td>
+          <td>
+            <span class="norm-gen">2–25 mUI/L</span><br>
+            <span class="norm-sport">&lt; 10 mUI/L · HOMA-IR &lt; 2.0</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">DHEA-S</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Réserve surrénalienne</span>
+          </td>
+          <td>Précurseur hormones sexuelles. DHEA-S bas + Cortisol bas = épuisement axe HPA ("adrenal fatigue"). Complète le triptyque Testo/Cortisol/DHEA-S pour le diagnostic différentiel burnout vs surentraînement.</td>
+          <td>
+            <span class="norm-gen">H : 80–560 · F : 35–430 µg/dL</span><br>
+            <span class="norm-sport">Moitié supérieure de la norme pour l'âge</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">IGF-1</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Marqueur RED-S</span>
+          </td>
+          <td>Médiateur de la GH, reflète l'état anabolique à long terme. IGF-1 bas = déficit calorique chronique (RED-S) ou surentraînement avancé. Un des marqueurs les plus fiables du RED-S.</td>
+          <td>
+            <span class="norm-gen">100–400 ng/mL (variable selon âge)</span><br>
+            <span class="norm-sport">Moitié supérieure de la norme · ↓ = RED-S</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <!-- NOUVELLES HN -->
+        <tr>
+          <td>
+            <span class="marker-name">Homocystéine</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Carrefour de méthylation</span>
+          </td>
+          <td>Si B9/B12/B6 déficients → homocystéine s'accumule → stress oxydatif, neuroinflammation. Reflète la capacité à synthétiser créatine, carnitine, CoQ10, catécholamines via la SAM (donneur universel de méthyle).</td>
+          <td>
+            <span class="norm-gen">H : 5.9–15.3 · F : 4.9–11.6 µmol/L</span><br>
+            <span class="norm-sport">&lt; 8 µmol/L · > 15 = hyperhomocystéinémie</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~18€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Sélénium plasmatique</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Cofacteur GPX</span>
+          </td>
+          <td>Cofacteur essentiel de la GPX (sélénoenzyme). Se bas → GPX inactive. Sols européens pauvres → carence fréquente. 2 noix du Brésil/jour = 100% des besoins.</td>
+          <td>
+            <span class="norm-gen">60–120 µg/L</span><br>
+            <span class="norm-sport">> 75 µg/L · &lt; 60 = GPX compromise</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~18€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Cuivre sérique</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Cofacteur SOD + dopamine β-hydroxylase</span>
+          </td>
+          <td>Cofacteur SOD1/SOD3 (antioxydant) + dopamine β-hydroxylase (dopamine → noradrénaline). Facteur limitant de la noradrénaline. Bas = fatigue + ↓ vigilance + ↓ antioxydant.</td>
+          <td>
+            <span class="norm-gen">H : 70–140 · F : 80–155 µg/dL</span><br>
+            <span class="norm-sport">Zone médiane · Bas = ↓ SOD + ↓ noradrénaline</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~12€</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cost-box">
+      <div class="cost-col nabm">
+        <h4>NABM Remboursé — 0€</h4>
+        <ul>
+          <li>Panel 1 (8 NABM) <span>0€</span></li>
+          <li>T3 libre <span>0€</span></li>
+          <li>B12 + Folates <span>0€</span></li>
+          <li>ASAT / ALAT / GGT <span>0€</span></li>
+          <li>Insuline à jeun <span>0€</span></li>
+          <li>DHEA-S <span>0€</span></li>
+          <li>IGF-1 <span>0€</span></li>
+        </ul>
+      </div>
+      <div class="cost-col hn">
+        <h4>Hors Nomenclature — Payant</h4>
+        <ul>
+          <li>Panel 1 (Vit D + Zn + Mg) <span>~37€</span></li>
+          <li>Homocystéine <span>~18€</span></li>
+          <li>Sélénium <span>~18€</span></li>
+          <li>Cuivre <span>~12€</span></li>
+        </ul>
+        <div class="cost-total" style="color:var(--orange)">
+          <span>TOTAL RESTE À CHARGE</span>
+          <span>~85€</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box note-green">
+      <p><strong>Ordonnance :</strong> 14 analyses NABM sur une seule ordonnance — parfaitement justifiable pour un bilan de suivi sportif. L'homocystéine et le sélénium sont parfois envoyés en sous-traitance par le labo de ville (délai 3-5 jours).</p>
+    </div>
+
+    <div class="justif">
+      <h3>Pourquoi ce panel est optimal à ~85€ de reste à charge</h3>
+      <p>Pour ~85€, ce panel contient <strong>20 analyses</strong> (14 NABM + 6 HN) et ajoute au Panel 1 :</p>
+      <ul>
+        <li><strong>Méthylation complète</strong> (B12 + B9 + Homocystéine) — les 3 cofacteurs du recyclage de l'homocystéine. On sait non seulement SI ça dysfonctionne, mais POURQUOI</li>
+        <li><strong>Thyroïde complète</strong> (TSH + T3L) — distingue hypothyroïdie vraie vs syndrome basse T3 (RED-S)</li>
+        <li><strong>Triptyque surrénalien</strong> (Testo + Cortisol + DHEA-S) — diagnostic différentiel burnout vs surentraînement vs RED-S</li>
+        <li><strong>RED-S complet</strong> (IGF-1 + HOMA-IR + T3L + T/C) — 4 marqueurs convergents pour le déficit énergétique</li>
+        <li><strong>Cofacteurs antioxydants</strong> (Sélénium + Cuivre) — prépare le terrain pour interpréter GPX/SOD du Panel 3</li>
+      </ul>
+      <div class="business-angle">
+        <h4>Angle business PRofiling</h4>
+        <p>20 analyses pour ~85€ de reste à charge, c'est un ratio extraordinaire. Le panel couvre le ratio T/C, le HOMA-IR, l'IGF-1, la méthylation ET les cofacteurs antioxydants. Aucun concurrent ne propose cette densité d'information à ce prix. Idéal pour le Pack 360 (129€/mois) et le Forfait Premium club. La combinaison DHEA-S + IGF-1 + T3L donne un diagnostic RED-S complet — argument massue pour les clubs féminins et les sports à catégorie de poids.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PANEL 3 : EXPERT — ~231€ de reste à charge
+     ===================================================== -->
+<section id="panel3" class="panel-section p-purple">
+  <div class="ctn">
+    <div class="panel-header">
+      <div class="panel-title-wrap">
+        <div class="panel-icon">🔬</div>
+        <div class="panel-title">
+          <h2>Panel 3 — EXPERT</h2>
+          <p>24 analyses · Stress oxydatif + acides gras membranaires · Labos spécialisés requis</p>
+        </div>
+      </div>
+      <div class="panel-price">
+        <div class="price">~231€</div>
+        <div class="note">Reste à charge (HN uniquement)</div>
+      </div>
+    </div>
+
+    <table class="marker-table">
+      <thead>
+        <tr>
+          <th>Marqueur</th>
+          <th>Rôle & Intérêt</th>
+          <th>Normes Gén. / Sportif</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="marker-name">Panel Performance complet</span><span class="marker-sub">20 analyses (14 NABM + 6 HN)</span></td>
+          <td colspan="2" style="color:var(--blue);text-align:center">✓ Inclus — voir Panel 2</td>
+          <td><span class="tag-nabm">14 × 0€</span><br><span class="tag-hn">6 × ~85€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Profil Acides Gras Érythrocytaires</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Index Oméga-3, AA/EPA, Ω6/Ω3</span>
+            <span class="tag-labo">Labo spécialisé (SYNLAB BFN, Biomnis, Cerba)</span>
+          </td>
+          <td>Composition lipidique des membranes des globules rouges — reflet de 90-120 jours d'apports. <strong>Index Ω3</strong> = risque CV + terrain inflammatoire. <strong>Ratio AA/EPA</strong> = meilleur prédicteur du risque de blessure musculo-tendineuse. LE marqueur phare de ce panel.</td>
+          <td>
+            <span class="norm-gen">Index Ω3 : 4–8% · AA/EPA : 5–15 · Ω6/Ω3 : 15–20:1</span><br>
+            <span class="norm-sport"><strong>Index Ω3 > 8% · AA/EPA &lt; 3 · Ω6/Ω3 : 1–4:1</strong></span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~80€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">GPX érythrocytaire</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Glutathion Peroxydase · Sélénoenzyme</span>
+            <span class="tag-labo">Labo spécialisé</span>
+          </td>
+          <td>Neutralise les peroxydes (H₂O₂ → H₂O). 1ère ligne antioxydante. Activité dépend du sélénium (dosé Panel 2). Avec la SOD (Panel 4), le ratio SOD/GPX évalue l'équilibre de la cascade.</td>
+          <td>
+            <span class="norm-gen">27.5–73.6 U/g Hb · F légèrement > H</span><br>
+            <span class="norm-sport">↑ par entraînement aérobie · GPX basse + Se bas = critique</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~30€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Vitamine B6 (PLP)</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Cofacteur AADC · Neurotransmetteurs</span>
+          </td>
+          <td>Cofacteur de l'AADC : 5-HTP → sérotonine et L-DOPA → dopamine. Sans B6 suffisante, synthèse de TOUS les neurotransmetteurs compromise. Aussi cofacteur transsulfuration (homocystéine → cystéine → glutathion).</td>
+          <td>
+            <span class="norm-gen">20–125 nmol/L</span><br>
+            <span class="norm-sport">> 30 nmol/L · &lt; 20 = carence</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~18€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Vitamine E (α-tocophérol)</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Antioxydant membranaire lipophile</span>
+          </td>
+          <td>Protège les EPA/DHA membranaires de la peroxydation lipidique. Si membranes riches en Ω3 MAIS Vit E basse = vulnérables à l'oxydation. Synergique avec le profil acides gras.</td>
+          <td>
+            <span class="norm-gen">5.5–17.0 mg/L</span><br>
+            <span class="norm-sport">> 8 mg/L · Basse + Ω3 élevé = membranes à risque</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~18€</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cost-box">
+      <div class="cost-col nabm">
+        <h4>NABM Remboursé — 0€</h4>
+        <ul>
+          <li>Panel 2 complet (14 NABM) <span>0€</span></li>
+          <li>Aucune nouvelle NABM à ce niveau <span>—</span></li>
+        </ul>
+      </div>
+      <div class="cost-col hn">
+        <h4>Hors Nomenclature — Payant</h4>
+        <ul>
+          <li>Panel 2 (6 HN) <span>~85€</span></li>
+          <li>Profil acides gras érythrocytaires <span>~80€</span></li>
+          <li>GPX érythrocytaire <span>~30€</span></li>
+          <li>Vitamine B6 (PLP) <span>~18€</span></li>
+          <li>Vitamine E (α-tocophérol) <span>~18€</span></li>
+        </ul>
+        <div class="cost-total" style="color:var(--orange)">
+          <span>TOTAL RESTE À CHARGE</span>
+          <span>~231€</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <p><strong>Labos spécialisés :</strong> Le profil acides gras et la GPX nécessitent un labo de biologie fonctionnelle : <strong>SYNLAB BFN</strong>, <strong>Eurofins Biomnis</strong>, <strong>Cerba</strong>, <strong>Barbier</strong>. Pas disponible en labo de ville classique. Délai : 7-15 jours. Le labo spécialisé peut gérer toutes les HN en une seule fois.</p>
+    </div>
+
+    <div class="justif">
+      <h3>Pourquoi ce panel est optimal à ~231€ de reste à charge</h3>
+      <p>Pour ~231€, ce panel ajoute 4 analyses HN spécialisées qui créent 2 dimensions exclusives :</p>
+      <ul>
+        <li><strong>Terrain inflammatoire membranaire</strong> (Profil acides gras + Vit E) — l'AA/EPA est le meilleur prédicteur du risque de blessure musculo-tendineuse. Reflet de 90-120 jours = impossible à "tricher". Combiné à la Vit E, on sait si les oméga-3 membranaires sont protégés ou vulnérables</li>
+        <li><strong>Stress oxydatif objectif</strong> (GPX + B6) — la GPX est la 1ère ligne antioxydante. Avec le sélénium (Panel 2) et le cuivre (Panel 2) déjà dosés, on sait si chaque enzyme a ses cofacteurs. La B6 prépare l'interprétation des neurotransmetteurs du Panel 4</li>
+      </ul>
+      <div class="business-angle">
+        <h4>Angle business PRofiling</h4>
+        <p>Le profil acides gras est LE game-changer. Dire "ton ratio AA/EPA est à 12, ton risque de blessure est maximal" crée une prise de conscience immédiate et justifie un accompagnement 3-6 mois (supplémentation Ω3 + suivi → fidélisation). Aucun diététicien classique ne propose ça. Idéal pour clubs pro (Ligue 1/2, Top 14) et Pack 360 individuel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PANEL 4 : ÉLITE — ~456€ de reste à charge
+     ===================================================== -->
+<section id="panel4" class="panel-section p-gold">
+  <div class="ctn">
+    <div class="panel-header">
+      <div class="panel-title-wrap">
+        <div class="panel-icon">👑</div>
+        <div class="panel-title">
+          <h2>Panel 4 — ÉLITE</h2>
+          <p>33+ analyses · Neurotransmetteurs + Kynurénine + Intestin · Sang + Urines 24h + Selles</p>
+        </div>
+      </div>
+      <div class="panel-price">
+        <div class="price">~456€</div>
+        <div class="note">Reste à charge (HN uniquement)</div>
+      </div>
+    </div>
+
+    <table class="marker-table">
+      <thead>
+        <tr>
+          <th>Marqueur</th>
+          <th>Rôle & Intérêt</th>
+          <th>Normes Gén. / Sportif</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="marker-name">Panel Expert complet</span><span class="marker-sub">24 analyses (14 NABM + 10 HN)</span></td>
+          <td colspan="2" style="color:var(--purple);text-align:center">✓ Inclus — voir Panel 3</td>
+          <td><span class="tag-nabm">14 × 0€</span><br><span class="tag-hn">10 × ~231€</span></td>
+        </tr>
+        <!-- NOUVELLES NABM -->
+        <tr>
+          <td>
+            <span class="marker-name">HVA + 5-HIAA (urines 24h)</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Métabolites dopamine + sérotonine</span>
+            <span class="urine-tag">Urines 24h</span>
+          </td>
+          <td><strong>HVA</strong> = reflet dopamine : motivation, récompense, coordination. <strong>5-HIAA</strong> = reflet sérotonine : humeur, sommeil, satiété. HVA bas = burnout (déficit dopaminergique dominant). 5-HIAA bas = impulsivité, troubles du sommeil.</td>
+          <td>
+            <span class="norm-gen">HVA — H : 1.4–8.8 · F : 1.0–7.5 mg/24h · 5-HIAA : 2–9 mg/24h</span><br>
+            <span class="norm-sport">HVA bas = anhédonie · 5-HIAA bas = impulsivité</span>
+          </td>
+          <td><span class="tag-nabm">NABM 0€</span></td>
+        </tr>
+        <!-- NOUVELLES HN -->
+        <tr>
+          <td>
+            <span class="marker-name">SOD érythrocytaire</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Superoxyde Dismutase · Zn/Cu/Mn</span>
+            <span class="tag-labo">Labo spécialisé</span>
+          </td>
+          <td>Convertit O₂⁻ → H₂O₂. Avec la GPX (Panel 3), le <strong>ratio SOD/GPX</strong> est le vrai indicateur du stress oxydatif. SOD haute + GPX basse = accumulation H₂O₂ = stress oxydatif paradoxal.</td>
+          <td>
+            <span class="norm-gen">164 ± 30 U/mL (érythrocytaire)</span><br>
+            <span class="norm-sport">SOD/GPX ratio équilibré = clé</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~30€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">MHPG (urines 24h)</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Métabolite noradrénaline</span>
+            <span class="urine-tag">Urines 24h</span>
+            <span class="tag-labo">Labo spécialisé</span>
+          </td>
+          <td>MHPG = reflet noradrénaline : vigilance, tonus, réponse au stress. MHPG bas = épuisement noradrénergique (indifférence, rupture sociale). Complète HVA + 5-HIAA pour le profil neurotransmetteurs 100% complet.</td>
+          <td>
+            <span class="norm-gen">0.9–2.6 mg/24h</span><br>
+            <span class="norm-sport">Bas = épuisement · Haut = stress chronique</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~25€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Kynurénine + Tryptophane</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Ratio KYN/TRP · Immunométabolisme</span>
+            <span class="tag-labo">Labo spécialisé obligatoire</span>
+          </td>
+          <td>Ratio KYN/TRP = activation IDO par inflammation. Chroniquement élevé = immunosuppression + déviation tryptophane vers voie neurotoxique (acide quinolinique). Marqueur avancé immuno-métabolique. TRI corrélé au VO₂max.</td>
+          <td>
+            <span class="norm-gen">Trp — H : 70.3 · F : 60.3 µmol/L · Kyn — H : 3.06 · F : 2.66</span><br>
+            <span class="norm-sport">KYN/TRP ↑ repos = activation immune · TRI ↑ = bonne fitness</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~65€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">Zonuline sérique</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Perméabilité intestinale</span>
+            <span class="tag-labo">Labo spécialisé</span>
+          </td>
+          <td>Marqueur "leaky gut". Exercice intense → ischémie-reperfusion intestinale → ouverture jonctions serrées → passage antigènes → inflammation systémique. Zonuline élevée = cercle vicieux inflammation-fatigue.</td>
+          <td>
+            <span class="norm-gen">&lt; 48 ng/mL (moy. 34 ± 14)</span><br>
+            <span class="norm-sport">Post-exercice intense : ↑ significatif (53→70)</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~45€</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="marker-name">AGCC fécaux</span><span class="new-tag">NOUVEAU</span>
+            <span class="marker-sub">Butyrate, Propionate, Acétate</span>
+            <span class="urine-tag">Analyse fécale</span>
+            <span class="tag-labo">Labo spécialisé</span>
+          </td>
+          <td>Métabolites du microbiote. Butyrate = anti-inflammatoire intestinal. Propionate = Veillonella atypica convertit lactate → propionate chez marathoniens (Scheiman, Science 2019). VO₂max corrélé positivement au butyrate (Barton 2018).</td>
+          <td>
+            <span class="norm-gen">Variables selon méthode</span><br>
+            <span class="norm-sport">Butyrate ↑ = corrélé VO₂max · Propionate ↑ = conversion lactate</span>
+          </td>
+          <td><span class="tag-hn">HN</span> <span class="prix-hn">~60€</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cost-box">
+      <div class="cost-col nabm">
+        <h4>NABM Remboursé — 0€</h4>
+        <ul>
+          <li>Panel 3 (14 NABM) <span>0€</span></li>
+          <li>HVA urinaire 24h <span>0€</span></li>
+          <li>5-HIAA urinaire 24h <span>0€</span></li>
+        </ul>
+      </div>
+      <div class="cost-col hn">
+        <h4>Hors Nomenclature — Payant</h4>
+        <ul>
+          <li>Panel 3 (10 HN) <span>~231€</span></li>
+          <li>SOD érythrocytaire <span>~30€</span></li>
+          <li>MHPG urinaire <span>~25€</span></li>
+          <li>Kynurénine + Tryptophane <span>~65€</span></li>
+          <li>Zonuline sérique <span>~45€</span></li>
+          <li>AGCC fécaux <span>~60€</span></li>
+        </ul>
+        <div class="cost-total" style="color:var(--orange)">
+          <span>TOTAL RESTE À CHARGE</span>
+          <span>~456€</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <p><strong>3 types de prélèvement :</strong> <strong>Sang veineux</strong> (matin, à jeun) + <strong>Urines 24h</strong> (container spécial, conservation au froid) + <strong>Échantillon fécal</strong> (kit AGCC). Les HVA et 5-HIAA sont NABM (remboursés). Le MHPG est hors nomenclature. Kynurénine, Zonuline, AGCC : labos spécialisés uniquement (<strong>SYNLAB BFN</strong>, <strong>Biomnis</strong>, <strong>Barbier</strong>). Délai : 10-20 jours.</p>
+    </div>
+
+    <div class="justif">
+      <h3>Pourquoi ce panel est optimal à ~456€ de reste à charge</h3>
+      <p>Pour ~456€, ce panel totalise <strong>33+ analyses</strong> (16 NABM + 15 HN + 3 types de prélèvement) — le bilan le plus complet possible en France :</p>
+      <ul>
+        <li><strong>Cascade antioxydante complète</strong> (SOD + GPX + ratio SOD/GPX) — identifie le déséquilibre exact. Si SOD haute + GPX basse = H₂O₂ toxique accumulé</li>
+        <li><strong>Profil neurotransmetteurs complet</strong> (HVA + 5-HIAA + MHPG) — les 3 axes monoaminergiques. Distingue burnout (HVA bas) vs surentraînement vs dépression. HVA et 5-HIAA sont NABM = gratuits !</li>
+        <li><strong>Immunométabolisme avancé</strong> (KYN/TRP) — marqueur de recherche qui passe en clinique. Voie neurotoxique vs neuroprotective</li>
+        <li><strong>Axe intestinal</strong> (Zonuline + AGCC) — hyperperméabilité + état du microbiote. Boucle inflammation → intestin → performance</li>
+      </ul>
+      <div class="business-angle">
+        <h4>Angle business PRofiling</h4>
+        <p>Produit "Signature" — AUCUN concurrent ne propose kynurénine, AGCC, SOD/GPX ratio en France dans un panel sportif. Facturable 700-1 000€ tout compris (analyses + interprétation PRofiling + plan d'action + suivi 3 mois). Réservé aux athlètes élite (Ligue 1, Top 14, Équipe de France), clubs pro en pré-saison, et Executive Signature 360. Fidélisation maximale : chaque résultat nécessite 3-6 mois de normalisation → revenus récurrents garantis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPARATIF ===== -->
+<section id="comparatif">
+  <div class="ctn">
+    <h2 style="text-align:center;margin-bottom:8px">Comparatif des <span class="hl">4 Panels</span></h2>
+    <p style="text-align:center;color:var(--txt2);margin-bottom:30px">Chaque panel inclut le précédent · Prix = reste à charge HN uniquement</p>
+
+    <div class="compare-grid">
+      <div class="compare-card cc-green">
+        <h4>Essentiel</h4>
+        <div class="c-price">~37€</div>
+        <div class="c-sub">reste à charge</div>
+        <div class="c-count">11 analyses · 8 NABM + 3 HN</div>
+        <ul>
+          <li style="color:var(--green)">NFS + Ferritine + Fer/CST + CRP + CK</li>
+          <li style="color:var(--green)">Testostérone + Cortisol → T/C</li>
+          <li style="color:var(--green)">TSH + Glycémie</li>
+          <li style="color:var(--orange)">Vit D + Zinc + Mg érythrocytaire</li>
+        </ul>
+      </div>
+      <div class="compare-card cc-blue">
+        <h4>Performance</h4>
+        <div class="c-price">~85€</div>
+        <div class="c-sub">reste à charge</div>
+        <div class="c-count">20 analyses · 14 NABM + 6 HN</div>
+        <ul>
+          <li style="color:var(--green)">+ T3L + B12 + B9 + Bilan hépatique</li>
+          <li style="color:var(--green)">+ Insuline → HOMA-IR</li>
+          <li style="color:var(--green)">+ DHEA-S + IGF-1</li>
+          <li style="color:var(--orange)">+ Homocystéine + Sélénium + Cuivre</li>
+        </ul>
+      </div>
+      <div class="compare-card cc-purple">
+        <h4>Expert</h4>
+        <div class="c-price">~231€</div>
+        <div class="c-sub">reste à charge</div>
+        <div class="c-count">24 analyses · 14 NABM + 10 HN</div>
+        <ul>
+          <li style="color:var(--orange)">+ Profil acides gras (Ω3, AA/EPA)</li>
+          <li style="color:var(--orange)">+ GPX érythrocytaire</li>
+          <li style="color:var(--orange)">+ Vitamine B6 (PLP)</li>
+          <li style="color:var(--orange)">+ Vitamine E</li>
+        </ul>
+      </div>
+      <div class="compare-card cc-gold">
+        <h4>Élite</h4>
+        <div class="c-price">~456€</div>
+        <div class="c-sub">reste à charge</div>
+        <div class="c-count">33+ analyses · Sang + Urines + Selles</div>
+        <ul>
+          <li style="color:var(--green)">+ HVA + 5-HIAA (NABM gratuits !)</li>
+          <li style="color:var(--orange)">+ SOD + MHPG + Kynurénine/Trp</li>
+          <li style="color:var(--orange)">+ Zonuline + AGCC fécaux</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MATRICE DE DÉTECTION ===== -->
+<section id="detection">
+  <div class="ctn">
+    <h2 style="text-align:center;margin-bottom:8px">Matrice de <span class="hl">Détection</span></h2>
+    <p style="text-align:center;color:var(--txt2);margin-bottom:30px">Capacité de chaque panel à identifier les problématiques sportives</p>
+
+    <table class="detect-table">
+      <thead>
+        <tr>
+          <th>Problématique</th>
+          <th style="color:var(--green)">Essentiel ~37€</th>
+          <th style="color:var(--blue)">Performance ~85€</th>
+          <th style="color:var(--purple)">Expert ~231€</th>
+          <th style="color:var(--gold)">Élite ~456€</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Carence en fer / Anémie</td>
+          <td class="detect-yes">● Complet</td>
+          <td class="detect-yes">● Complet</td>
+          <td class="detect-yes">● Complet</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+        <tr>
+          <td>Surentraînement (OTS)</td>
+          <td class="detect-partial">◐ T/C + CK</td>
+          <td class="detect-yes">● T/C + DHEA-S + T3L</td>
+          <td class="detect-yes">● + Ω3/GPX</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+        <tr>
+          <td>RED-S (Déficit énergétique)</td>
+          <td class="detect-partial">◐ T/C + TSH</td>
+          <td class="detect-yes">● IGF-1 + HOMA-IR + T3L</td>
+          <td class="detect-yes">● Complet</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+        <tr>
+          <td>Burnout / Fatigue chronique</td>
+          <td class="detect-no">○ Suspicion (Cortisol bas)</td>
+          <td class="detect-partial">◐ DHEA-S + T/C</td>
+          <td class="detect-partial">◐ + B6 (cofacteur NT)</td>
+          <td class="detect-yes">● HVA + MHPG + 5-HIAA</td>
+        </tr>
+        <tr>
+          <td>Risque blessure musculo-tendineuse</td>
+          <td class="detect-partial">◐ Vit D + CK + Zn</td>
+          <td class="detect-partial">◐ + Se + Cu</td>
+          <td class="detect-yes">● AA/EPA + Ω3 index</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+        <tr>
+          <td>Carences micronutriments</td>
+          <td class="detect-partial">◐ Vit D + Zn + Mg</td>
+          <td class="detect-yes">● + Se + Cu + B12 + B9</td>
+          <td class="detect-yes">● + B6 + Vit E</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+        <tr>
+          <td>Défaut de méthylation</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-yes">● B12 + B9 + Hcy</td>
+          <td class="detect-yes">● + B6 (transsulfuration)</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+        <tr>
+          <td>Stress oxydatif</td>
+          <td class="detect-no">○ Indirect (Zn)</td>
+          <td class="detect-partial">◐ Se + Cu (cofacteurs)</td>
+          <td class="detect-partial">◐ GPX + Vit E</td>
+          <td class="detect-yes">● SOD/GPX ratio</td>
+        </tr>
+        <tr>
+          <td>Terrain pro-inflammatoire membranaire</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-yes">● Profil AG + Vit E</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+        <tr>
+          <td>Dysfonction neurotransmetteurs</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-no">○ B6 cofacteur</td>
+          <td class="detect-yes">● HVA + 5-HIAA + MHPG</td>
+        </tr>
+        <tr>
+          <td>Hyperperméabilité intestinale</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-no">○ Non</td>
+          <td class="detect-yes">● Zonuline + AGCC</td>
+        </tr>
+        <tr>
+          <td>Immunosuppression</td>
+          <td class="detect-partial">◐ NFS + CRP</td>
+          <td class="detect-partial">◐ + Cortisol + Zn</td>
+          <td class="detect-partial">◐ + Vit D + Se</td>
+          <td class="detect-yes">● KYN/TRP ratio</td>
+        </tr>
+        <tr>
+          <td>Résistance à l'insuline</td>
+          <td class="detect-partial">◐ Glycémie seule</td>
+          <td class="detect-yes">● HOMA-IR complet</td>
+          <td class="detect-yes">● Complet</td>
+          <td class="detect-yes">● Complet</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== RECOMMANDATIONS ===== -->
+<section id="recommandations">
+  <div class="ctn">
+    <h2 style="text-align:center;margin-bottom:30px">Recommandations <span class="hl">par Profil Client</span></h2>
+
+    <table class="marker-table">
+      <thead>
+        <tr>
+          <th>Profil Client</th>
+          <th>Panel Recommandé</th>
+          <th>Fréquence</th>
+          <th>Intégration Offre PRofiling</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="marker-name">Sportif amateur</span><span class="marker-sub">Running, CrossFit, salle de sport</span></td>
+          <td class="norm-sport">Essentiel (~37€)</td>
+          <td>1-2× / an</td>
+          <td>Inclus dans l'Audit Individuel (75€). Produit d'appel, conversion 40-60% vers Panel 2.</td>
+        </tr>
+        <tr>
+          <td><span class="marker-name">Athlète compétiteur</span><span class="marker-sub">Régional à National</span></td>
+          <td class="norm-sport">Performance (~85€)</td>
+          <td>2-3× / an</td>
+          <td>Pack 360 (129€/mois). 20 analyses avec ratio T/C + HOMA-IR + IGF-1 + méthylation.</td>
+        </tr>
+        <tr>
+          <td><span class="marker-name">Club professionnel</span><span class="marker-sub">Ligue 1/2, Top 14, Pro D2</span></td>
+          <td class="norm-sport">Expert (~231€) min.</td>
+          <td>3-4× / an</td>
+          <td>Forfait Premium club. Le profil acides gras est le minimum pour un club pro.</td>
+        </tr>
+        <tr>
+          <td><span class="marker-name">Athlète élite / Olympique</span><span class="marker-sub">Équipe de France, haut niveau</span></td>
+          <td style="color:var(--gold)">Élite (~456€)</td>
+          <td>4× / an</td>
+          <td>Facturable 700-1 000€ tout compris (analyses + interprétation + plan + suivi 3 mois).</td>
+        </tr>
+        <tr>
+          <td><span class="marker-name">Cadre dirigeant / Executive</span><span class="marker-sub">Signature 360</span></td>
+          <td class="norm-sport">Expert ou Élite</td>
+          <td>2× / an</td>
+          <td>Offre Executive Signature. Prévention burnout + optimisation cognitive.</td>
+        </tr>
+        <tr>
+          <td><span class="marker-name">Club amateur / Association</span><span class="marker-sub">Effectif de 15-30 joueurs</span></td>
+          <td class="norm-sport">Essentiel (~37€)</td>
+          <td>1× / an (pré-saison)</td>
+          <td>Audit Flash (55€/joueur) × effectif. Volume = rentabilité. Screening rapide.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="ctn">
+    <p><strong>PRofiling</strong> — "Là où les autres estiment, nous mesurons"</p>
+    <p style="margin-top:8px">Prix hors nomenclature indicatifs, variables selon les laboratoires et régions.<br>
+    Basés sur les grilles tarifaires SYNLAB BFN, Biomnis, Cerba (2024-2026).<br>
+    NABM remboursé à 60% Sécu + 40% mutuelle = ~100% pris en charge avec ordonnance.</p>
+    <p style="margin-top:8px">Outil d'aide à la décision interne PRofiling.<br>
+    Analyses biologiques sur prescription médicale ou à la demande du patient.</p>
+    <p style="margin-top:12px"><a href="https://profiling-sport.vercel.app">profiling-sport.vercel.app</a> · contact@profiling-sport.com</p>
+  </div>
+</footer>
+
+</body>
+</html>

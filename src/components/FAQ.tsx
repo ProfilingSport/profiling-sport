@@ -91,12 +91,16 @@ export default function FAQ() {
                   </button>
 
                   <div
-                    className={`grid transition-all duration-300 ease-in-out ${
-                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+                      isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="px-6 pb-5 text-gray-400 leading-relaxed">
+                      <p
+                        className={`px-6 pb-5 text-gray-400 leading-relaxed transition-opacity duration-300 ${
+                          isOpen ? "opacity-100 delay-100" : "opacity-0"
+                        }`}
+                      >
                         {faq.answer}
                       </p>
                     </div>

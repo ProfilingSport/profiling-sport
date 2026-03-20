@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marqueurs Biologiques du Surentraînement — PRofiling</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  :root {
+    --bg:#080808;--bg-card:#0c0c0e;--bg-sec:#0a0a0c;--cyan:#00E5FF;--red:#D90429;--green:#10B981;--amber:#F59E0B;--purple:#8B5CF6;
+    --txt:#FFF;--txt2:#A0A0A0;--muted:#666;--border:rgba(255,255,255,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .ctn{max-width:1140px;margin:0 auto;padding:0 24px}
+  /* HERO */
+  .hero{padding:80px 0 60px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,229,255,.04) 0%,transparent 70%);pointer-events:none}
+  .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.05);border-radius:50px;padding:6px 16px;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:24px}
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+  h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.2;margin-bottom:16px}
+  h1 span,.hl{color:var(--cyan)}
+  .hero p{color:var(--txt2);font-size:1.05rem;max-width:700px;margin:0 auto}
+  /* SECTIONS */
+  section{padding:60px 0;border-bottom:1px solid var(--border)}
+  .sl{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+  h2{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:700;margin-bottom:12px}
+  h2 span{color:var(--cyan)}
+  .sd{color:var(--txt2);font-size:.95rem;max-width:700px;margin-bottom:32px}
+  h3{font-size:1.05rem;font-weight:700;margin-bottom:10px}
+  /* GRIDS */
+  .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+  .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+  .g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  /* CARD */
+  .cd{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:24px;transition:border-color .3s}
+  .cd:hover{border-color:rgba(0,229,255,.15)}
+  .cd p,.cd li{color:var(--txt2);font-size:.88rem;line-height:1.65}
+  .tg{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.15);border-radius:4px;padding:3px 8px;margin-bottom:12px}
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:16px}
+  thead th{text-align:left;padding:10px 12px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--txt2);vertical-align:top}
+  tbody tr:hover td{color:var(--txt)}
+  .p{display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:600;white-space:nowrap}
+  .pg{background:rgba(16,185,129,.12);color:var(--green)}
+  .pa{background:rgba(245,158,11,.12);color:var(--amber)}
+  .pr{background:rgba(217,4,41,.12);color:var(--red)}
+  .pc{background:rgba(0,229,255,.1);color:var(--cyan)}
+  .pp{background:rgba(139,92,246,.12);color:var(--purple)}
+  /* ALERT */
+  .al{border-radius:10px;padding:20px 24px;margin-top:24px;display:flex;gap:16px;align-items:flex-start}
+  .al svg{width:24px;height:24px;flex-shrink:0;margin-top:2px}
+  .al strong{display:block;margin-bottom:4px;font-size:.9rem}
+  .al p{color:var(--txt2);font-size:.85rem}
+  .al-g{background:rgba(16,185,129,.06);border-left:3px solid var(--green)}
+  .al-a{background:rgba(245,158,11,.06);border-left:3px solid var(--amber)}
+  .al-r{background:rgba(217,4,41,.06);border-left:3px solid var(--red)}
+  .al-c{background:rgba(0,229,255,.06);border-left:3px solid var(--cyan)}
+  /* FORMULA */
+  .fm{background:var(--bg-sec);border:1px solid var(--border);border-radius:8px;padding:16px 20px;font-family:'Courier New',monospace;font-size:.88rem;color:var(--cyan);margin:16px 0;overflow-x:auto}
+  /* PATHWAY */
+  .pw{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0}
+  .pw-box{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:.82rem;font-weight:600;white-space:nowrap}
+  .pw-arr{color:var(--cyan);font-size:1.2rem;font-weight:700}
+  .pw-enz{font-size:.7rem;color:var(--amber);display:block;text-align:center;margin-top:-4px}
+  /* STAT */
+  .st{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+  .st .n{font-size:2rem;font-weight:800;color:var(--cyan)}
+  .st .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px}
+  /* DIAG TABLE */
+  .dt{font-size:.8rem}
+  .dt td:first-child{font-weight:600;color:var(--txt);white-space:nowrap}
+  .arrow-up{color:var(--red)}
+  .arrow-down{color:var(--green)}
+  .arr-a{color:var(--amber)}
+  footer{text-align:center;padding:40px 0;color:var(--muted);font-size:.75rem;border-top:1px solid var(--border)}
+  @media(max-width:768px){.g2,.g3,.g4{grid-template-columns:1fr}table{font-size:.78rem}thead th,tbody td{padding:8px 6px}}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<header class="hero">
+<div class="ctn">
+  <div class="badge"><span class="dot"></span> Revue de Littérature Scientifique</div>
+  <h1>Marqueurs Biologiques du <span>Surentraînement</span></h1>
+  <p>Guide de référence des marqueurs sanguins, urinaires et fonctionnels pour la détection du surentraînement, du burnout, du risque de blessure et du RED-S chez le sportif. Normes différenciées par sexe et type de pratique.</p>
+</div>
+</header>
+
+<!-- ══════════ 01 — INTRODUCTION ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">01 — Introduction</div>
+  <h2>Le Syndrome de <span>Surentraînement</span> : Un Diagnostic d'Exclusion</h2>
+  <p class="sd">Le consensus ECSS/ACSM (Meeusen et al., 2013) distingue trois stades de dépassement : le Functional Overreaching (FOR), le Non-Functional Overreaching (NFOR) et l'Overtraining Syndrome (OTS). Aucun marqueur biologique isolé ne permet de poser le diagnostic — c'est la combinaison de plusieurs panels et du contexte clinique qui oriente.</p>
+
+  <div class="g3">
+    <div class="cd">
+      <div class="tg">Composante métabolique</div>
+      <h3>Épuisement des réserves</h3>
+      <p>Déplétion du glycogène musculaire et hépatique, déséquilibre du pool d'acides aminés (notamment baisse des BCAA et du rapport tryptophane libre/BCAA), perturbation du métabolisme des acides gras et stress oxydatif chronique.</p>
+    </div>
+    <div class="cd">
+      <div class="tg">Composante endocrinienne</div>
+      <h3>Dérèglement de l'axe HPA</h3>
+      <p>Perturbation de l'axe hypothalamo-hypophyso-surrénalien : hypercortisolémie chronique puis effondrement, baisse des stéroïdes sexuels (testostérone, DHEA-S), dysfonction thyroïdienne (T3 libre basse), ratio T/C effondré.</p>
+    </div>
+    <div class="cd">
+      <div class="tg">Composante neuro-centrale</div>
+      <h3>Perturbation des neurotransmetteurs</h3>
+      <p>Dérèglement des axes sérotoninergique (5-HT), dopaminergique (DA) et noradrénergique (NA). Perturbation de la voie kynurénine-tryptophane. Impact direct sur le sommeil, l'humeur, la motivation et la récupération.</p>
+    </div>
+  </div>
+
+  <div class="al al-c">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div>
+      <strong>Approche multi-panels obligatoire</strong>
+      <p>L'ECSS/ACSM confirme qu'aucun test biochimique, immunologique ou hormonal isolé ne suffit. Les analyses servent à exclure d'autres pathologies (anémie, dysthyroïdie, infection) et à construire un profil longitudinal de l'athlète. C'est la variation par rapport à la baseline individuelle qui est significative, plus que la comparaison à une norme populationnelle.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 02 — ACIDES GRAS ÉRYTHROCYTAIRES ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">02 — Profil des Acides Gras Érythrocytaires</div>
+  <h2>Composition Lipidique Membranaire et <span>Inflammation</span></h2>
+  <p class="sd">Les acides gras des membranes érythrocytaires reflètent 90 à 120 jours d'apports alimentaires et de synthèse endogène — bien plus stable qu'un dosage plasmatique ponctuel. Ce profil renseigne sur le terrain inflammatoire, le risque de blessure et la qualité de la récupération.</p>
+
+  <h3>Voie Oméga-6 (pro-inflammatoire)</h3>
+  <div class="pw">
+    <div class="pw-box">Acide linoléique (LA)<br><span style="font-size:.7rem;color:var(--muted)">18:2 n-6 — essentiel</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Δ6-désaturase<br>(Mg, Zn, B3, B6)</span></div>
+    <div class="pw-box">GLA</div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Élongase</span></div>
+    <div class="pw-box" style="border-color:rgba(16,185,129,.3)">DGLA<br><span style="font-size:.7rem;color:var(--green)">anti-inflammatoire (PGE1)</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Δ5-désaturase</span></div>
+    <div class="pw-box" style="border-color:rgba(217,4,41,.3)">AA (Arachidonique)<br><span style="font-size:.7rem;color:var(--red)">pro-inflammatoire (PGE2, TX, LT)</span></div>
+  </div>
+
+  <h3>Voie Oméga-3 (anti-inflammatoire)</h3>
+  <div class="pw">
+    <div class="pw-box">ALA (α-linolénique)<br><span style="font-size:.7rem;color:var(--muted)">18:3 n-3 — essentiel</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Δ6-désaturase<br>(compétition avec LA)</span></div>
+    <div class="pw-box">SDA → EPA<br><span style="font-size:.7rem;color:var(--green)">20:5 n-3</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Élongase + β-oxydation</span></div>
+    <div class="pw-box" style="border-color:rgba(16,185,129,.3)">DHA<br><span style="font-size:.7rem;color:var(--green)">22:6 n-3 — résolvines, protectines</span></div>
+  </div>
+
+  <div class="al al-a">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+    <div>
+      <strong>Cofacteurs de la Δ6-désaturase : le verrou métabolique</strong>
+      <p>Une carence en magnésium, zinc, vitamine B3 ou B6 bloque la Δ6-désaturase, empêchant la conversion de LA en GLA et d'ALA en EPA. Le rapport LA/DGLA érythrocytaire élevé est un marqueur indirect de cette carence en cofacteurs. Chez le sportif carencé, supplémenter en oméga-3 seul peut être insuffisant si les cofacteurs ne sont pas corrigés.</p>
+    </div>
+  </div>
+
+  <h3>Normes de référence</h3>
+  <table>
+    <thead><tr><th>Marqueur</th><th>Pop. générale</th><th>Sportif optimal</th><th>Alerte</th><th>Sexe</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Index Omega-3</strong><br>(EPA+DHA % membrane)</td><td>4–8 % (intermédiaire)</td><td><span class="p pg">&gt; 8 %</span></td><td><span class="p pr">&lt; 4 % = risque élevé</span></td><td>F légèrement &gt; H (œstrogènes favorisent conversion DHA)</td></tr>
+      <tr><td><strong>Ratio AA/EPA</strong></td><td>5–15 (occidental moyen)</td><td><span class="p pg">&lt; 3</span></td><td><span class="p pr">&gt; 10 = terrain pro-inflammatoire</span></td><td>Pas de différence H/F significative</td></tr>
+      <tr><td><strong>Ratio Ω6/Ω3 global</strong></td><td>15–20:1 (France)</td><td><span class="p pg">1–4:1</span></td><td><span class="p pr">&gt; 10:1</span></td><td>Idem</td></tr>
+      <tr><td><strong>Rapport LA/DGLA</strong></td><td>Variable</td><td><span class="p pg">Bas = bonne conversion</span></td><td><span class="p pa">Élevé = déficit Δ6-désaturase</span></td><td>Idem</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)"><strong>Donnée clé :</strong> 93 % des athlètes élite ont un Index Omega-3 &lt; 8 % (Drobnic et al., 2017). Chez les footballeurs NCAA Division I, 34 % sont &lt; 4 % (risque élevé) et 66 % entre 4–8 % (Von Schacky, 2019). Cible : 1–3 g EPA+DHA/jour (GSSIWEB).</p>
+
+  <h3 style="margin-top:28px">Indications cliniques</h3>
+  <div class="g3">
+    <div class="cd"><p><strong style="color:var(--txt)">Risque blessure / tendinite</strong> — AA/EPA &gt; 10 + Index Ω3 &lt; 4 % = terrain inflammatoire chronique favorisant les lésions tendineuses et retardant la cicatrisation.</p></div>
+    <div class="cd"><p><strong style="color:var(--txt)">Troubles cognitifs / dépression</strong> — DHA bas = altération de la fluidité membranaire neuronale. Corrélation avec la voie kynurénine (section 10).</p></div>
+    <div class="cd"><p><strong style="color:var(--txt)">Évaluation des habitudes alimentaires</strong> — Le profil érythrocytaire intègre 3 mois de régime : objectivation du rapport poissons gras / viande / huiles végétales.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 03 — GPX ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">03 — Stress Oxydatif : GPX (Glutathion Peroxydase)</div>
+  <h2>Détoxification des <span>Peroxydes</span></h2>
+  <p class="sd">La GPX est une sélénoenzyme — le sélénium se trouve dans son site actif sous forme de sélénocystéine. Elle constitue la défense antioxydante majeure contre les peroxydes d'hydrogène et les hydroperoxydes lipidiques issus du stress oxydatif de l'exercice.</p>
+
+  <h3>Réactions catalysées</h3>
+  <div class="fm">2 GSH + H₂O₂ → GS-SG + 2 H₂O &nbsp;&nbsp;&nbsp;&nbsp;(détoxification peroxyde d'hydrogène)<br>2 GSH + R-OOH → GS-SG + R-OH + H₂O &nbsp;&nbsp;(détoxification peroxydes organiques : acides gras, cholestérol)</div>
+
+  <h3>Recyclage du glutathion</h3>
+  <div class="pw">
+    <div class="pw-box" style="border-color:rgba(245,158,11,.3)">GS-SG (oxydé)</div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Glutathion réductase<br>(NADPH via B3 + FAD via B2)</span></div>
+    <div class="pw-box" style="border-color:rgba(16,185,129,.3)">2 GSH (réduit)</div>
+  </div>
+  <p style="font-size:.85rem;color:var(--txt2);margin-bottom:20px">La <strong>N-acétylcystéine (NAC)</strong> est le précurseur direct du GSH et permet de restaurer les stocks de glutathion réduit. À envisager si GPX basse + sélénium normal = épuisement du substrat GSH.</p>
+
+  <h3>Isoformes principales</h3>
+  <table>
+    <thead><tr><th>Isoforme</th><th>Localisation</th><th>Substrats</th><th>Cofacteur</th></tr></thead>
+    <tbody>
+      <tr><td><strong>GPX1</strong></td><td>Cytoplasme (érythrocytes ++)</td><td>H₂O₂, petits peroxydes organiques</td><td>Sélénium</td></tr>
+      <tr><td><strong>GPX3</strong></td><td>Plasma, rein</td><td>H₂O₂ extracellulaire</td><td>Sélénium</td></tr>
+      <tr><td><strong>GPX4</strong></td><td>Membranes cellulaires</td><td>Hydroperoxydes phospholipidiques</td><td>Sélénium</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:24px">Normes et interprétation</h3>
+  <table>
+    <thead><tr><th>Paramètre</th><th>Homme</th><th>Femme</th><th>Sportif</th><th>Unité</th></tr></thead>
+    <tbody>
+      <tr><td><strong>GPX érythrocytaire</strong></td><td>27.5–73.6</td><td>27.5–73.6 (tendance légèrement &gt;)</td><td>Augmentée par l'entraînement aérobie chronique</td><td>U/g Hb</td></tr>
+      <tr><td><strong>GPX plasmatique</strong></td><td>Labo-dépendant</td><td>F &gt; H (protection œstrogénique)</td><td>Peut ↑ en phase de charge intense</td><td>U/L</td></tr>
+    </tbody>
+  </table>
+
+  <div class="g2" style="margin-top:20px">
+    <div class="al al-a" style="margin:0">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"/></svg>
+      <div><strong>GPX basse + Sélénium bas</strong><p>Carence en sélénium = facteur limitant. Supplémentation : sélénium (100–200 µg/jour) ou 2 noix du Brésil/jour.</p></div>
+    </div>
+    <div class="al al-r" style="margin:0">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"/></svg>
+      <div><strong>GPX basse + Sélénium normal</strong><p>Épuisement du glutathion (GSH). Envisager NAC 600–1200 mg/jour et vérifier B2/B3 (cofacteurs glutathion réductase).</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 04 — SOD ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">04 — Stress Oxydatif : SOD (Superoxyde Dismutase)</div>
+  <h2>Première Ligne de <span>Défense</span> Antioxydante</h2>
+  <p class="sd">La SOD catalyse la dismutation de l'anion superoxyde (O₂•⁻) — le radical libre le plus produit pendant l'exercice — en peroxyde d'hydrogène (H₂O₂), ensuite éliminé par la GPX ou la catalase.</p>
+
+  <div class="fm">2 O₂•⁻ + 2 H⁺ → O₂ + H₂O₂ &nbsp;&nbsp;(puis H₂O₂ → H₂O via GPX ou catalase)</div>
+
+  <h3>Trois isoformes, trois localisations</h3>
+  <table>
+    <thead><tr><th>Isoforme</th><th>Cofacteur</th><th>Localisation</th><th>Rôle principal</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SOD1 (Cu/Zn-SOD)</strong></td><td>Cuivre + Zinc</td><td>Cytoplasme, membrane cellulaire</td><td>Protection intracellulaire</td></tr>
+      <tr><td><strong>SOD2 (Mn-SOD)</strong></td><td>Manganèse</td><td>Matrice mitochondriale</td><td>Protection de la chaîne respiratoire</td></tr>
+      <tr><td><strong>SOD3 (EC-SOD)</strong></td><td>Cuivre + Zinc</td><td>Espace extracellulaire</td><td>Protection du milieu interstitiel</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:24px">Normes de référence</h3>
+  <table>
+    <thead><tr><th>Paramètre</th><th>Homme</th><th>Femme</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SOD érythrocytaire</strong></td><td>164 ± 30 U/mL (Paglia & Valentine)</td><td>Légèrement inférieur</td><td>Labo-dépendant. H &gt; F chez jeunes athlètes</td></tr>
+      <tr><td><strong>Mn-SOD sérique</strong></td><td>99.8 ± 24.8 ng/mL</td><td>88.8 ± 20.8 ng/mL</td><td>Ghazizadeh et al., 2021</td></tr>
+    </tbody>
+  </table>
+
+  <div class="al al-r" style="margin-top:20px">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div>
+      <strong>Ratio SOD/GPX : l'équilibre critique</strong>
+      <p>La SOD produit H₂O₂, la GPX l'élimine. Si la SOD est très sollicitée (exercice intense) et que la GPX est épuisée (carence Se/GSH), le H₂O₂ s'accumule → dommage oxydatif paradoxal malgré une SOD "élevée". Un ratio SOD/GPX déséquilibré est un signe précoce de surentraînement. L'EFSA (2012) a conclu que la supplémentation orale en SOD est inefficace (enzyme dégradée dans le tractus digestif).</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 05 — HOMOCYSTÉINE & MÉTHYLATION ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">05 — Homocystéine & Cycle de Méthylation</div>
+  <h2>Carrefour Métabolique <span>Central</span></h2>
+  <p class="sd">L'homocystéine est au croisement de la synthèse des neurotransmetteurs, de la détoxification (glutathion), de la production d'énergie musculaire (créatine, L-carnitine, CoQ10) et de la réparation de l'ADN. Son dosage est un marqueur intégrateur du statut en B9, B12, B6 et de la capacité de méthylation.</p>
+
+  <h3>Cycle méthionine-homocystéine</h3>
+  <div class="pw">
+    <div class="pw-box" style="border-color:rgba(0,229,255,.3)">Méthionine</div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">+ ATP + Mg</span></div>
+    <div class="pw-box" style="border-color:rgba(0,229,255,.5)"><strong>SAM</strong><br><span style="font-size:.7rem;color:var(--cyan)">Donneur universel de méthyle</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Cède CH₃</span></div>
+    <div class="pw-box">SAH</div>
+    <div><span class="pw-arr">→</span></div>
+    <div class="pw-box" style="border-color:rgba(245,158,11,.3)"><strong>Homocystéine</strong></div>
+  </div>
+
+  <h3>3 voies de recyclage de l'homocystéine</h3>
+  <table>
+    <thead><tr><th>Voie</th><th>Mécanisme</th><th>Cofacteurs</th><th>Produit</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1. Voie des folates</strong></td><td>5-CH₃-THF + Hcy → Méthionine</td><td>B9 (folates), <strong>B12</strong> (méthylcobalamine)</td><td>Méthionine (recyclage)</td></tr>
+      <tr><td><strong>2. Voie bétaïne/choline</strong></td><td>TMG + Hcy → Méthionine</td><td>Triméthylglycine (bétaïne)</td><td>Méthionine (foie/rein)</td></tr>
+      <tr><td><strong>3. Voie de transsulfuration</strong></td><td>Hcy + Sérine → Cystathionine → Cystéine</td><td><strong>B6</strong> (PLP)</td><td><strong>Glutathion</strong> (→ cystéine + glycine + glutamate)</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:24px">Rôles de la méthylation chez le sportif</h3>
+  <div class="g3">
+    <div class="cd"><p><strong style="color:var(--cyan)">Synthèse créatine</strong> — Consomme ~70 % des groupements méthyle de la SAM. Hyperhomocystéinémie = synthèse altérée = performance musculaire diminuée.</p></div>
+    <div class="cd"><p><strong style="color:var(--cyan)">Synthèse L-carnitine</strong> — Transport des acides gras vers la mitochondrie. Déficit = moindre oxydation lipidique = fatigue à l'effort prolongé.</p></div>
+    <div class="cd"><p><strong style="color:var(--cyan)">Synthèse CoQ10</strong> — Chaîne respiratoire mitochondriale + régénération de la vitamine E. Dépend de la SAM.</p></div>
+  </div>
+
+  <h3 style="margin-top:24px">Normes de référence</h3>
+  <table>
+    <thead><tr><th>Paramètre</th><th>Homme</th><th>Femme</th><th>Sportif optimal</th><th>Alerte</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Homocystéine</strong></td><td>5.9–15.3 µmol/L</td><td>4.9–11.6 µmol/L</td><td><span class="p pg">&lt; 8 µmol/L</span></td><td><span class="p pr">&gt; 15 = hyperhomocystéinémie</span></td></tr>
+      <tr><td><strong>Folates érythrocytaires</strong></td><td colspan="2">317–1422 nmol/L</td><td><span class="p pg">&gt; 600 nmol/L</span></td><td><span class="p pr">&lt; 317 = carence</span></td></tr>
+      <tr><td><strong>B12 active (holotranscobalamine)</strong></td><td colspan="2">25.1–165 pmol/L</td><td><span class="p pg">&gt; 50 pmol/L</span></td><td><span class="p pr">&lt; 25 = carence fonctionnelle</span></td></tr>
+      <tr><td><strong>Vitamine B6 (PLP)</strong></td><td colspan="2">20–125 nmol/L</td><td><span class="p pg">&gt; 30 nmol/L</span></td><td><span class="p pa">&lt; 20 = carence</span></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)"><strong>Donnée clé :</strong> Les marathoniens montrent une hausse de ~64 % de l'homocystéine post-course. 47 % des athlètes non-professionnels ont une Hcy &gt; 15 µmol/L contre 15 % des sédentaires (Roussel, IEPP). Doser les folates érythrocytaires (pas sériques) et la B12 active (pas totale) pour un reflet fidèle.</p>
+</div>
+</section>
+
+<!-- ══════════ 06 — FER & MICRONUTRIMENTS ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">06 — Métabolisme Ferreux & Micronutriments Clés</div>
+  <h2>Statut Micronutritionnel <span>Complet</span></h2>
+  <p class="sd">Chaque micronutriment ci-dessous est un cofacteur essentiel d'au moins un système antioxydant (GPX, SOD), enzymatique (Δ6-désaturase, méthylation) ou hormonal. Leur dosage est indissociable d'une évaluation globale du surentraînement.</p>
+
+  <table>
+    <thead><tr><th>Marqueur</th><th>Homme</th><th>Femme</th><th>Sportif optimal</th><th>Rôle clé</th><th>Lien systémique</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Fer sérique</strong></td><td>65–175 µg/dL</td><td>50–170 µg/dL</td><td>Contexte hémolyse</td><td>Transport O₂ (hème)</td><td>Cofacteur tyrosine-3-hydroxylase (synthèse dopamine)</td></tr>
+      <tr><td><strong>Ferritine</strong></td><td>20–300 ng/mL</td><td>10–200 ng/mL</td><td><span class="p pg">&gt; 50 (ACSM)</span><br><span class="p pc">Idéal 80–150</span></td><td>Réserves martiales</td><td>Ferritine basse = fatigue + ↓ synthèse catécholamines</td></tr>
+      <tr><td><strong>Transferrine (saturation)</strong></td><td>20–50 %</td><td>15–50 %</td><td><span class="p pg">&gt; 20 %</span></td><td>Transport plasmatique</td><td>&lt; 16 % = carence fonctionnelle en fer</td></tr>
+      <tr><td><strong>Vitamine D (25-OH)</strong></td><td colspan="2">30–100 ng/mL</td><td><span class="p pg">&gt; 40 ng/mL</span></td><td>Immunité, os, muscle</td><td>&lt; 20 = carence. 56 % des athlètes &lt; 30 en hiver</td></tr>
+      <tr><td><strong>Magnésium éryth.</strong></td><td colspan="2">1.65–2.65 mmol/L</td><td><span class="p pg">&gt; 2.0 mmol/L</span></td><td>Cofacteur Δ6-désat. + SAM</td><td>65% os, 34% cellules, 1% extra-cell. Éryth. &gt; sérique</td></tr>
+      <tr><td><strong>Zinc sérique</strong></td><td>70–120 µg/dL</td><td>66–110 µg/dL</td><td><span class="p pg">&gt; 80 µg/dL</span></td><td>Cofacteur SOD1 + Δ6-désat.</td><td>Zinc bas = ↓ SOD + ↓ conversion oméga + ↓ immunité</td></tr>
+      <tr><td><strong>Sélénium plasmatique</strong></td><td colspan="2">60–120 µg/L</td><td><span class="p pg">&gt; 75 µg/L</span></td><td>Cofacteur GPX (sélénoprotéine)</td><td>Se bas = GPX inactivée. Source : 2 noix du Brésil/jour</td></tr>
+      <tr><td><strong>Cuivre sérique</strong></td><td>70–140 µg/dL</td><td>80–155 µg/dL</td><td>Zone médiane</td><td>Cofacteur SOD1/SOD3</td><td><strong>Facteur limitant</strong> dopamine β-hydroxylase (DA→NA)</td></tr>
+      <tr><td><strong>Vitamine E (α-tocophérol)</strong></td><td colspan="2">5.5–17.0 mg/L</td><td><span class="p pg">&gt; 8 mg/L</span></td><td>Antioxydant lipophile membranaire</td><td>↓ par alcool/tabac. CoQ10 régénère Vit E</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<!-- ══════════ 07 — HORMONES ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">07 — Composante Hormonale & Surentraînement</div>
+  <h2>Axe Hypothalamo-Hypophyso-<span>Surrénalien</span></h2>
+  <p class="sd">Le ratio Testostérone/Cortisol est le marqueur endocrinien le plus étudié dans le surentraînement. Sa baisse reflète le basculement de l'équilibre anabolique/catabolique. Mais il doit être interprété avec la DHEA-S, la TSH et le contexte clinique.</p>
+
+  <table>
+    <thead><tr><th>Marqueur</th><th>Homme</th><th>Femme</th><th>Sportif optimal</th><th>Seuil critique</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Testostérone totale</strong></td><td>2.8–8.0 ng/mL</td><td>0.15–0.70 ng/mL</td><td><span class="p pg">H : &gt; 5.0 ng/mL</span></td><td><span class="p pr">H : &lt; 3.0 = investigation</span></td></tr>
+      <tr><td><strong>Testostérone libre</strong></td><td>8.7–25.1 pg/mL</td><td>0.3–1.9 pg/mL</td><td>Tiers supérieur de la norme</td><td>↓ en surentraînement + déficit calorique</td></tr>
+      <tr><td><strong>Cortisol (matin 8h)</strong></td><td colspan="2">5–25 µg/dL (138–690 nmol/L)</td><td><span class="p pg">10–18 µg/dL</span></td><td><span class="p pr">&gt; 25 ou &lt; 5 = dérèglement HPA</span></td></tr>
+      <tr><td><strong>Ratio T/C</strong><br>T(nmol/L) / C(nmol/L)</td><td colspan="2">Variable individuelle</td><td><span class="p pg">&gt; 0.035</span></td><td><span class="p pr">&lt; 0.035 ou baisse &gt; 30 % vs baseline</span></td></tr>
+      <tr><td><strong>DHEA-S</strong></td><td>80–560 µg/dL</td><td>35–430 µg/dL</td><td>Moitié supérieure</td><td><span class="p pa">Bas = fatigue surrénalienne</span></td></tr>
+      <tr><td><strong>TSH</strong></td><td colspan="2">0.4–4.0 mUI/L</td><td><span class="p pg">1.0–2.5 mUI/L</span></td><td><span class="p pa">&lt; 0.4 ou &gt; 4.0</span></td></tr>
+      <tr><td><strong>T3 libre</strong></td><td colspan="2">2.3–4.2 pg/mL</td><td><span class="p pg">&gt; 3.0 pg/mL</span></td><td><span class="p pr">↓ en surentraînement = catabolisme</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="al al-r" style="margin-top:20px">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div>
+      <strong>Manifestations sexe-spécifiques du surentraînement</strong>
+      <p><strong>Homme :</strong> baisse de la testostérone → diminution de la libido, réduction de la production de spermatozoïdes, perte de masse musculaire, fatigue chronique.<br>
+      <strong>Femme :</strong> perturbation de l'axe HPG → aménorrhée secondaire ou oligoménorrhée. Si associée à une restriction calorique et une densité osseuse basse = triade de l'athlète féminine / RED-S.<br>
+      <strong>Les deux sexes :</strong> perturbation de la glucorégulation, baisse T3 libre (économie d'énergie catabolique), TSH basse.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 08 — DIGESTIF ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">08 — Composante Digestive : Perméabilité Intestinale & Microbiote</div>
+  <h2>Le <span>"Leaky Gut"</span> Induit par l'Exercice Intense</h2>
+  <p class="sd">L'exercice intense impose un triple stress au tractus digestif : ischémie splanchnique (réduction de 80 % du flux sanguin intestinal), stress énergétique et stress thermique. Le mécanisme d'ischémie-reperfusion génère des radicaux libres qui endommagent les jonctions serrées → hyperperméabilité intestinale.</p>
+
+  <h3>Zonuline — Marqueur de perméabilité</h3>
+  <table>
+    <thead><tr><th>Paramètre</th><th>Norme</th><th>Post-exercice intense</th><th>Interprétation</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Zonuline sérique</strong></td><td>&lt; 48 ng/mL (moy. 34 ± 14)</td><td>↑ significative (ex. 53→70 ng/mL)</td><td>Élevée = hyperperméabilité = passage antigènes bactériens</td></tr>
+      <tr><td><strong>Zonuline fécale</strong></td><td>&lt; 30 ng/mL</td><td>Variable</td><td>Récepteurs PAR2, EGFr activés</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.82rem;color:var(--muted);margin-top:8px"><strong>Note méthodologique :</strong> la validité des tests ELISA pour la zonuline est débattue — certains kits détectent aussi l'haptoglobine. Interpréter en contexte clinique.</p>
+
+  <h3 style="margin-top:24px">Intolérances alimentaires — Panels IgG</h3>
+  <p style="font-size:.88rem;color:var(--txt2);margin-bottom:12px">En cas de zonuline élevée, le passage de macromolécules alimentaires à travers la barrière intestinale peut déclencher une réponse immunitaire IgG retardée.</p>
+  <div class="g3">
+    <div class="cd"><p><strong style="color:var(--txt)">Gluten/blé</strong> — IgG gluten, IgG froment, IgG gliadine, IgA gliadine (composante muqueuse)</p></div>
+    <div class="cd"><p><strong style="color:var(--txt)">Produits laitiers</strong> — IgG alpha-lactalbumine, IgG beta-lactoglobuline, IgG caséine</p></div>
+    <div class="cd"><p><strong style="color:var(--txt)">Panel 44/96 aliments</strong> — Couverture élargie : œufs, soja, levures, fruits à coque, etc.</p></div>
+  </div>
+
+  <h3 style="margin-top:24px">Microbiote — Séquençage ARN 16S & AGCC</h3>
+  <p style="font-size:.88rem;color:var(--txt2);margin-bottom:16px">Le séquençage de l'ARN ribosomal 16S permet de cartographier la composition du microbiote. Les acides gras à courtes chaînes (AGCC) sont les métabolites clés produits par les bactéries intestinales à partir des fibres alimentaires.</p>
+
+  <table>
+    <thead><tr><th>AGCC</th><th>Rôle principal</th><th>Impact sportif</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Butyrate</strong></td><td>Anti-inflammatoire intestinal, source énergétique des colonocytes, régulation de la réponse immunitaire, apoptose cellulaire</td><td>VO₂max corrélé positivement à la production de butyrate (Barton et al., 2018)</td></tr>
+      <tr><td><strong>Propionate</strong></td><td>Précurseur de la gluconéogenèse, inhibe la lipogenèse et la synthèse de cholestérol</td><td>↑ Veillonella atypica chez marathoniens (convertit lactate → propionate, Scheiman et al., Science 2019)</td></tr>
+      <tr><td><strong>Acétate</strong></td><td>Substrat énergétique, régulation de l'appétit (axe intestin-cerveau)</td><td>AGCC le plus abondant quantitativement</td></tr>
+    </tbody>
+  </table>
+
+  <div class="al al-a" style="margin-top:20px">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"/></svg>
+    <div>
+      <strong>Dysbiose induite par l'exercice intensif</strong>
+      <p>Une consommation insuffisante de fibres → ↓ production AGCC → dysbiose intestinale → inflammation de la muqueuse → hyperperméabilité → déséquilibres immunitaires. Plus l'exercice est intense, plus la dysbiose est rapide et profonde. Les athlètes d'endurance modérée montrent au contraire une diversité microbienne supérieure aux sédentaires.</p>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:.88rem;color:var(--txt2)"><strong>Supplémentation si zonuline élevée :</strong> L-Glutamine (5–10 g/jour, substrat des entérocytes), probiotiques multi-souches, augmentation des apports en fibres fermentescibles.</p>
+</div>
+</section>
+
+<!-- ══════════ 09 — NEUROTRANSMETTEURS ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">09 — Neurotransmetteurs Urinaires 24h</div>
+  <h2>Axes Dopaminergique, Noradrénergique & <span>Sérotoninergique</span></h2>
+  <p class="sd">Le dosage des métabolites urinaires sur 24 heures permet d'évaluer le turnover des trois axes principaux du système nerveux central. Conditions pré-analytiques : éviter banane, café, thé, chocolat, vanille 48h avant le recueil.</p>
+
+  <h3>Voie de biosynthèse des catécholamines</h3>
+  <div class="pw">
+    <div class="pw-box">Tyrosine</div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Tyrosine-3-hydroxylase<br><span style="color:var(--red)">(étape limitante)</span><br>Cofacteurs: Fe²⁺, BH4</span></div>
+    <div class="pw-box">L-DOPA</div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">DOPA décarboxylase<br>Cofacteur: <strong>B6</strong></span></div>
+    <div class="pw-box" style="border-color:rgba(0,229,255,.3)"><strong>Dopamine</strong><br><span style="font-size:.7rem;color:var(--muted)">métabolite: HVA</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Dopamine β-hydroxylase<br>Cofacteurs: <strong>Cu</strong>, Vit C</span></div>
+    <div class="pw-box" style="border-color:rgba(245,158,11,.3)"><strong>Noradrénaline</strong><br><span style="font-size:.7rem;color:var(--muted)">métabolite: MHPG</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">PNMT<br>Cofacteur: <strong>SAM</strong></span></div>
+    <div class="pw-box" style="border-color:rgba(217,4,41,.3)"><strong>Adrénaline</strong></div>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted);margin-bottom:20px"><strong>Points critiques :</strong> Fe²⁺ pour l'étape limitante, B6 pour la décarboxylation, Cu pour la conversion DA→NA (carence Cu = bottleneck noradrénergique), SAM pour la méthylation NA→Adrénaline (lien direct avec section 05).</p>
+
+  <h3>Voie sérotoninergique</h3>
+  <div class="pw">
+    <div class="pw-box">Tryptophane</div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Tryptophane hydroxylase<br>Cofacteurs: Fe²⁺, BH4</span></div>
+    <div class="pw-box">5-HTP</div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">Décarboxylase (B6)</span></div>
+    <div class="pw-box" style="border-color:rgba(139,92,246,.3)"><strong>Sérotonine (5-HT)</strong><br><span style="font-size:.7rem;color:var(--muted)">métabolite: 5-HIAA</span></div>
+    <div><span class="pw-arr">→</span><span class="pw-enz">N-acétyltransférase<br>+ HIOMT</span></div>
+    <div class="pw-box" style="border-color:rgba(139,92,246,.5)"><strong>Mélatonine</strong><br><span style="font-size:.7rem;color:var(--purple)">hormone du sommeil</span></div>
+  </div>
+
+  <h3 style="margin-top:24px">Normes et interprétation des métabolites urinaires 24h</h3>
+  <table>
+    <thead><tr><th>Métabolite</th><th>Axe</th><th>Homme</th><th>Femme</th><th>Si BAS</th><th>Si ÉLEVÉ</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>HVA</strong><br>(acide homovanillique)</td>
+        <td><span class="p pc">Dopamine</span></td>
+        <td>1.4–8.8 mg/24h</td>
+        <td>1.0–7.5 mg/24h</td>
+        <td><span class="p pr">Déficit dopaminergique</span><br>Fatigue matinale, trouble humeur, ↑ T°/glycémie, ↓ concentration</td>
+        <td><span class="p pa">Excès ou trouble récepteurs</span><br>Déséquilibre Ω3 post-synaptique</td>
+      </tr>
+      <tr>
+        <td><strong>MHPG</strong><br>(3-méthoxy-4-hydroxyphénylglycol)</td>
+        <td><span class="p pa">Noradrénaline</span></td>
+        <td colspan="2">0.9–2.6 mg/24h</td>
+        <td><span class="p pr">Déficit noradrénergique</span><br>Épuisement physique/moral, indifférence, rupture sociale, insomnie/dépression</td>
+        <td><span class="p pr">Excès noradrénergique</span><br>Stress chronique, anxiété, hypersensibilité émotionnelle, agitation motrice</td>
+      </tr>
+      <tr>
+        <td><strong>5-HIAA</strong><br>(acide 5-hydroxy-indolacétique)</td>
+        <td><span class="p pp">Sérotonine</span></td>
+        <td colspan="2">2–9 mg/24h<br>(10.4–46.8 µmol/24h)</td>
+        <td><span class="p pr">Déficit sérotoninergique</span><br>Impulsivité, troubles sommeil, troubles du comportement alimentaire</td>
+        <td><span class="p pa">Excès sérotoninergique</span><br>Angoisse, phobie, fatigue profonde</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="al al-c" style="margin-top:20px">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <div>
+      <strong>Support nutritionnel par chronobiologie</strong>
+      <p><strong>Matin :</strong> protéines riches en tyrosine (œufs, viande, poisson) → synthèse dopamine + noradrénaline → vigilance, concentration.<br>
+      <strong>Après-midi :</strong> oméga-3 (poisson gras, huile de lin) → fluidité membranaire neuronale.<br>
+      <strong>Soir :</strong> glucides complexes + aliments riches en tryptophane (riz, légumineuses, banane, chocolat noir) → sérotonine → mélatonine → qualité du sommeil.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 10 — KYNURÉNINE ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">10 — Voie Kynurénine-Tryptophane & Composante Psychologique</div>
+  <h2>La Bifurcation <span>Métabolique</span> Cruciale du Tryptophane</h2>
+  <p class="sd">~95 % du tryptophane est métabolisé via la voie kynurénine (et non vers la sérotonine). Cette voie se divise en un bras neuroprotecteur et un bras neurotoxique. L'exercice physique oriente activement cette bifurcation — c'est l'un des mécanismes majeurs par lesquels l'activité physique protège la santé mentale.</p>
+
+  <div class="g2">
+    <div class="cd" style="border-color:rgba(16,185,129,.3)">
+      <div class="tg" style="color:var(--green);background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.15)">Bras neuroprotecteur</div>
+      <h3 style="color:var(--green)">Kynurénine → Acide kynurénique (KA)</h3>
+      <p>Antagoniste des récepteurs NMDA → protège le tissu cérébral de l'excitotoxicité. <strong>Augmente après l'exercice</strong> grâce à l'activation de la PGC-1α1 dans le muscle squelettique, qui induit les enzymes KAT (kynurenine aminotransférase).</p>
+    </div>
+    <div class="cd" style="border-color:rgba(217,4,41,.3)">
+      <div class="tg" style="color:var(--red);background:rgba(217,4,41,.08);border-color:rgba(217,4,41,.15)">Bras neurotoxique</div>
+      <h3 style="color:var(--red)">Kynurénine → 3-HK → Acide quinolinique (QA)</h3>
+      <p>Agoniste NMDA → excitotoxicité neuronale, stress oxydatif cérébral. <strong>Diminue après l'exercice</strong> car le muscle détourne la kynurénine vers la voie KA. Lien fort avec dépression et surentraînement avancé.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px">Données de référence (Schlegel et al., PLOS ONE 2016)</h3>
+  <table>
+    <thead><tr><th>Paramètre</th><th>Homme (médiane)</th><th>Femme (médiane)</th><th>Post-exercice exhaustif</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Tryptophane plasmatique</strong></td><td>70.3 µmol/L</td><td>60.3 µmol/L</td><td>↑ transitoire puis ↓ (déplétion)</td></tr>
+      <tr><td><strong>Kynurénine</strong></td><td>3.06 µmol/L</td><td>2.66 µmol/L</td><td>↑ (activation IDO par inflammation)</td></tr>
+      <tr><td><strong>Ratio KYN/TRP</strong></td><td colspan="2">Variable — marqueur d'activation IDO</td><td><span class="p pr">↑ = inflammation + immunodépression</span></td></tr>
+      <tr><td><strong>TRI (Tryptophan Recovery Index)</strong></td><td colspan="2">Corrélation positive avec VO₂max</td><td><span class="p pg">TRI élevé = bonne forme aérobie</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="al al-r" style="margin-top:20px">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div>
+      <strong>Marqueur clé du surentraînement avancé</strong>
+      <p>Un ratio KYN/TRP chroniquement élevé au repos indique une activation immunitaire persistante (IDO surexprimée) → déviation du tryptophane vers la voie kynurénine au détriment de la sérotonine → humeur dépressive, troubles du sommeil, fatigue profonde. Ce ratio est également élevé chez les patients dépressifs et les individus suicidaires (Sublette et al., 2011). Chez l'athlète surentraîné, c'est un marqueur immunologique de l'état de NFOR/OTS.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 11 — RYTHME BIOLOGIQUE ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">11 — Rythme Biologique & Chrononutrition Sportive</div>
+  <h2>Synchronisation <span>Circadienne</span> de la Performance</h2>
+  <p class="sd">Les rythmes circadiens influencent directement la disponibilité des substrats énergétiques, la température corporelle, la sécrétion hormonale et les capacités cognitives. Aligner la nutrition et l'entraînement sur ces rythmes optimise la performance et la récupération.</p>
+
+  <div class="g2">
+    <div class="cd">
+      <h3 style="color:var(--cyan)">Pics physiologiques</h3>
+      <table style="margin:0">
+        <tbody>
+          <tr><td><strong>6h–8h</strong></td><td>Pic cortisol matinal → éveil, mobilisation énergétique</td></tr>
+          <tr><td><strong>9h–12h</strong></td><td>Pic capacité intellectuelle → contenus stratégiques/tactiques</td></tr>
+          <tr><td><strong>14h–15h</strong></td><td>Creux post-prandial → éviter les séances cognitives intenses</td></tr>
+          <tr><td><strong>16h–18h</strong></td><td><span class="p pg">Pic performance physique</span> → T° corporelle optimale, force musculaire max</td></tr>
+          <tr><td><strong>18h–20h</strong></td><td>Pic capacité mnésique → mémorisation tactique long terme</td></tr>
+          <tr><td><strong>21h–23h</strong></td><td>Montée mélatonine → préparation au sommeil</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cd">
+      <h3 style="color:var(--cyan)">Chrononutrition appliquée</h3>
+      <table style="margin:0">
+        <tbody>
+          <tr><td><strong>Petit-déjeuner</strong></td><td>Protéines + tyrosine (œufs, viande, fromage) → <span style="color:var(--cyan)">Dopamine</span> → vigilance, motivation</td></tr>
+          <tr><td><strong>Déjeuner</strong></td><td>Équilibré + oméga-3 (poisson gras) → fluidité membranaire, anti-inflammation</td></tr>
+          <tr><td><strong>Collation 16h</strong></td><td>Glucides + fruits secs → recharge glycogène pré-entraînement</td></tr>
+          <tr><td><strong>Dîner</strong></td><td>Glucides complexes + tryptophane (riz, légumineuses, banane) → <span style="color:var(--purple)">Sérotonine → Mélatonine</span> → sommeil</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="al al-c" style="margin-top:20px">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <div>
+      <strong>Monitoring dopaminergique via HVA</strong>
+      <p>Un déficit en HVA urinaire (axe dopaminergique) combiné à une fatigue matinale persistante, des troubles de l'humeur au réveil et une montée de la glycémie/température suggestive → suspicion de déficit dopaminergique. Relier au dosage du cuivre sérique (cofacteur limitant DA→NA) et au profil de méthylation (SAM nécessaire pour NA→Adrénaline).</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 12 — DIAGNOSTIC DIFFÉRENTIEL ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">12 — Diagnostic Différentiel : Croisement des Marqueurs</div>
+  <h2>Surentraînement vs Burnout vs Blessure vs <span>RED-S</span></h2>
+  <p class="sd">C'est la section la plus importante sur le plan clinique. Aucun marqueur seul ne suffit — c'est le pattern combiné qui oriente le diagnostic. Le tableau ci-dessous synthétise les profils biologiques typiques de chaque situation.</p>
+
+  <div style="overflow-x:auto">
+  <table class="dt">
+    <thead>
+      <tr>
+        <th style="min-width:160px">Marqueur</th>
+        <th style="min-width:150px;color:var(--red)">Surentraînement (OTS)</th>
+        <th style="min-width:150px;color:var(--amber)">Burnout / Fatigue chronique</th>
+        <th style="min-width:150px;color:var(--purple)">Risque blessure musculo-tendineux</th>
+        <th style="min-width:150px;color:var(--cyan)">RED-S</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Ratio T/C</td><td><span class="p pr">↓↓ (&lt;0.035 ou -30%)</span></td><td><span class="p pa">Variable</span></td><td><span class="p pa">Borderline</span></td><td><span class="p pr">↓↓ (perturbé)</span></td></tr>
+      <tr><td>Cortisol</td><td><span class="p pr">↑ puis ↓ (stade avancé)</span></td><td><span class="p pa">↓ (axe HPA émoussé)</span></td><td><span class="p pg">Normal ou ↑ léger</span></td><td><span class="p pr">↑ (conservation énergie)</span></td></tr>
+      <tr><td>Testostérone</td><td><span class="p pr">↓</span></td><td><span class="p pa">↓ légère</span></td><td><span class="p pg">Normal</span></td><td><span class="p pr">↓↓ (H: libido ↓, F: aménorrhée)</span></td></tr>
+      <tr><td>DHEA-S</td><td><span class="p pr">↓</span></td><td><span class="p pr">↓↓</span></td><td><span class="p pg">Normal</span></td><td><span class="p pa">↓</span></td></tr>
+      <tr><td>TSH / T3 libre</td><td><span class="p pr">TSH ↓, T3 ↓</span></td><td><span class="p pa">Variable</span></td><td><span class="p pg">Normal</span></td><td><span class="p pr">TSH ↓, T3 ↓ (catabolisme)</span></td></tr>
+      <tr><td>Ferritine</td><td><span class="p pa">↓ (épuisement)</span></td><td><span class="p pa">Souvent ↓</span></td><td><span class="p pr">↓↓ (&lt;30 ng/mL)</span></td><td><span class="p pr">↓↓</span></td></tr>
+      <tr><td>Vitamine D</td><td><span class="p pa">↓</span></td><td><span class="p pa">↓</span></td><td><span class="p pr">↓↓ (&lt;20 ng/mL)</span></td><td><span class="p pr">↓↓</span></td></tr>
+      <tr><td>Index Omega-3</td><td><span class="p pa">&lt;4–8%</span></td><td><span class="p pa">↓</span></td><td><span class="p pr">&lt;4% = risque élevé</span></td><td><span class="p pa">↓</span></td></tr>
+      <tr><td>AA/EPA ratio</td><td><span class="p pa">↑</span></td><td><span class="p pg">Variable</span></td><td><span class="p pr">↑↑ (&gt;10)</span></td><td><span class="p pa">↑</span></td></tr>
+      <tr><td>SOD/GPX ratio</td><td><span class="p pr">Déséquilibré</span></td><td><span class="p pa">Variable</span></td><td><span class="p pg">Normal ou ↑</span></td><td><span class="p pa">Variable</span></td></tr>
+      <tr><td>Homocystéine</td><td><span class="p pa">↑</span></td><td><span class="p pa">↑</span></td><td><span class="p pg">Normal</span></td><td><span class="p pa">↑ (carence B9/B12)</span></td></tr>
+      <tr><td>CK repos</td><td><span class="p pr">&gt;1000 U/L chronique</span></td><td><span class="p pg">Normal</span></td><td><span class="p pr">↑↑ (dommage musculaire)</span></td><td><span class="p pa">Normal ou ↑</span></td></tr>
+      <tr><td>Zonuline</td><td><span class="p pa">↑</span></td><td><span class="p pg">Variable</span></td><td><span class="p pg">Variable</span></td><td><span class="p pa">↑ (inflammation)</span></td></tr>
+      <tr><td>HVA (dopamine)</td><td><span class="p pa">Variable (stade-dépendant)</span></td><td><span class="p pr">↓↓ (déficit dominant)</span></td><td><span class="p pg">Normal</span></td><td><span class="p pa">↓</span></td></tr>
+      <tr><td>MHPG (noradrénaline)</td><td><span class="p pa">Variable</span></td><td><span class="p pr">↓</span></td><td><span class="p pg">Normal</span></td><td><span class="p pa">↓</span></td></tr>
+      <tr><td>5-HIAA (sérotonine)</td><td><span class="p pa">↑ puis ↓</span></td><td><span class="p pa">Variable</span></td><td><span class="p pg">Normal</span></td><td><span class="p pa">↓</span></td></tr>
+      <tr><td>KYN/TRP ratio</td><td><span class="p pr">↑ (immunodépression)</span></td><td><span class="p pa">↑</span></td><td><span class="p pg">Normal</span></td><td><span class="p pa">Variable</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 style="margin-top:32px">Clés de lecture diagnostique</h3>
+  <div class="g2">
+    <div class="cd" style="border-left:3px solid var(--red)">
+      <h3 style="color:var(--red)">Pattern Surentraînement (OTS)</h3>
+      <p>Le surentraînement se distingue par un effondrement multi-systémique : T/C &lt; 0.035, TSH/T3 basses, SOD/GPX déséquilibré, CK chroniquement élevée au repos, KYN/TRP élevé. Il faut une baisse de performance &gt; 2 mois malgré le repos pour parler d'OTS vs NFOR. Diagnostic d'exclusion.</p>
+    </div>
+    <div class="cd" style="border-left:3px solid var(--amber)">
+      <h3 style="color:var(--amber)">Pattern Burnout / Fatigue chronique</h3>
+      <p>Le burnout se distingue par la prédominance du déficit dopaminergique (HVA ↓) et noradrénergique (MHPG ↓), avec un cortisol bas (axe HPA épuisé plutôt que hyperactivé). La DHEA-S est souvent très basse. Le profil hormonal est moins catastrophique que l'OTS, mais le profil neurotransmetteur est plus altéré.</p>
+    </div>
+    <div class="cd" style="border-left:3px solid var(--purple)">
+      <h3 style="color:var(--purple)">Pattern Risque Blessure</h3>
+      <p>Le risque de blessure musculo-tendineuse se caractérise par un terrain inflammatoire chronique (AA/EPA &gt; 10, Index Ω3 &lt; 4%), des carences micronutritionnelles (Vit D &lt; 20, Ferritine &lt; 30, Mg bas) et une CK élevée. Le profil hormonal et neurotransmetteur est souvent encore normal — c'est un état "pré-surentraînement".</p>
+    </div>
+    <div class="cd" style="border-left:3px solid var(--cyan)">
+      <h3 style="color:var(--cyan)">Pattern RED-S</h3>
+      <p>Le RED-S se distingue par une restriction calorique (volontaire ou non) comme cause primaire. Le cortisol est élevé (conservation d'énergie), la testostérone effondrée (F: aménorrhée), la ferritine et la Vit D très basses. Critère différenciant majeur : le RED-S se corrige rapidement avec une nutrition adéquate, contrairement à l'OTS qui nécessite des semaines/mois de repos.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 13 — PANELS RECOMMANDÉS ══════════ -->
+<section>
+<div class="ctn">
+  <div class="sl">13 — Panels Recommandés PRofiling</div>
+  <h2>Synthèse <span>Panélaire</span></h2>
+  <p class="sd">Organisation des marqueurs en panels thématiques pour le bilan PRofiling, avec niveau de priorité.</p>
+
+  <table>
+    <thead><tr><th>Panel</th><th>Marqueurs inclus</th><th>Priorité</th><th>Indication principale</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--green)">Stress Oxydatif</strong></td><td>GPX éryth., SOD éryth., ratio SOD/GPX, Sélénium, Zinc, Cuivre, Vit E, CoQ10</td><td><span class="p pg">Essentiel</span></td><td>Dommage oxydatif, surentraînement, récupération</td></tr>
+      <tr><td><strong style="color:var(--cyan)">Acides Gras</strong></td><td>Profil AG érythrocytaires complet, Index Ω3, ratio AA/EPA, ratio Ω6/Ω3, LA/DGLA</td><td><span class="p pg">Essentiel</span></td><td>Terrain inflammatoire, risque blessure, cognition</td></tr>
+      <tr><td><strong style="color:var(--purple)">Méthylation</strong></td><td>Homocystéine, Folates éryth., B12 active (holotranscobalamine), B6 (PLP)</td><td><span class="p pg">Essentiel</span></td><td>Capacité de méthylation, synthèse créatine/carnitine/CoQ10</td></tr>
+      <tr><td><strong style="color:var(--red)">Hormonal</strong></td><td>Testostérone (totale + libre), Cortisol matin, T/C ratio, DHEA-S, TSH, T3 libre</td><td><span class="p pg">Essentiel</span></td><td>Surentraînement, RED-S, axe HPA</td></tr>
+      <tr><td><strong style="color:var(--amber)">Micronutriments</strong></td><td>Fer, Ferritine, Transferrine (sat.), Vit D, Mg éryth., Zn, Se, Cu</td><td><span class="p pg">Essentiel</span></td><td>Cofacteurs enzymatiques, carences fonctionnelles</td></tr>
+      <tr><td><strong style="color:var(--green)">Digestif</strong></td><td>Zonuline, IgG alimentaires (panel 44), Séquençage 16S, AGCC fécaux</td><td><span class="p pa">Recommandé</span></td><td>Perméabilité intestinale, dysbiose, intolérances</td></tr>
+      <tr><td><strong style="color:var(--purple)">Neurotransmetteurs</strong></td><td>HVA, MHPG, 5-HIAA (urinaires 24h)</td><td><span class="p pa">Recommandé</span></td><td>Burnout, dépression, surentraînement SNC</td></tr>
+      <tr><td><strong style="color:var(--cyan)">Kynurénine</strong></td><td>Tryptophane plasmatique, Kynurénine, ratio KYN/TRP</td><td><span class="p pc">Recherche/avancé</span></td><td>Immunodépression, composante psychologique OTS</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<!-- ══════════ 14 — RÉFÉRENCES ══════════ -->
+<section style="border-bottom:none">
+<div class="ctn">
+  <div class="sl">14 — Références Bibliographiques</div>
+  <h2>Sources <span>Scientifiques</span></h2>
+
+  <div class="cd" style="margin-top:16px">
+    <ol style="padding-left:20px;color:var(--txt2);font-size:.85rem;line-height:2">
+      <li><strong>Meeusen R. et al.</strong> (2013). "Prevention, diagnosis, and treatment of the overtraining syndrome: joint consensus statement of the ECSS and ACSM." <em>Medicine & Science in Sports & Exercise</em>, 45(1), 186-205.</li>
+      <li><strong>Schlegel P. et al.</strong> (2016). "Effects of Exhaustive Aerobic Exercise on Tryptophan-Kynurenine Metabolism in Trained Athletes." <em>PLOS ONE</em>, 11(4), e0153617.</li>
+      <li><strong>Cerqueira É. et al.</strong> (2020). "Inflammatory Effects of High and Moderate Intensity Exercise—A Systematic Review." <em>Frontiers in Physiology</em>, 10, 1550.</li>
+      <li><strong>Agosta C. et al.</strong> (2017). "Kynurenines: Tryptophan's metabolites in exercise, inflammation, and mental health." <em>Science</em>, 357(6349), eaaf9794.</li>
+      <li><strong>Drobnic F. et al.</strong> (2017). "Erythrocyte Omega-3 Fatty Acid Content in Elite Athletes in Response to Omega-3 Supplementation." <em>Journal of Sports Science and Medicine</em>, 16(2), 287-294.</li>
+      <li><strong>Von Schacky C.</strong> (2019). "The Omega-3 Index in NCAA Division I Collegiate Football Athletes." <em>Journal of Athletic Training</em>, 54(1), 7-11.</li>
+      <li><strong>EFSA Panel on Dietetic Products</strong> (2012). "Scientific Opinion on the substantiation of health claims related to superoxide dismutase (SOD)." <em>EFSA Journal</em>, 10(2), 2525.</li>
+      <li><strong>Ghazizadeh H. et al.</strong> (2021). "Age- and sex-specific reference intervals for SOD and GPX." <em>Clinical Biochemistry</em>, 90, 49-55.</li>
+      <li><strong>Fasano A.</strong> (2011). "Zonulin and its regulation of intestinal barrier function: the biological door to inflammation, autoimmunity, and cancer." <em>Physiological Reviews</em>, 91(1), 151-175.</li>
+      <li><strong>Scheiman J. et al.</strong> (2019). "Meta-omics analysis of elite athletes identifies a performance-enhancing microbe that functions via lactate metabolism." <em>Nature Medicine</em>, 25(7), 1104-1109.</li>
+      <li><strong>Barton W. et al.</strong> (2018). "The microbiome of professional athletes differs from that of more sedentary subjects." <em>Gut</em>, 67(4), 625-633.</li>
+      <li><strong>Sublette M.E. et al.</strong> (2011). "Plasma kynurenine levels are elevated in suicide attempters with major depressive disorder." <em>Brain, Behavior, and Immunity</em>, 25(6), 1272-1278.</li>
+      <li><strong>Roussel A.M.</strong> (2013). "La méthylation en pratique clinique." <em>Lettre IEPP</em>, n°21.</li>
+      <li><strong>Lambert M.I. et al.</strong> (1993). "Testosterone and cortisol in athletes during a moderate intensity exercise." <em>International Journal of Sports Medicine</em>, 14(8), 434-438.</li>
+      <li><strong>Mountjoy M. et al.</strong> (2018). "IOC consensus statement on Relative Energy Deficiency in Sport (RED-S)." <em>British Journal of Sports Medicine</em>, 52, 687-697.</li>
+    </ol>
+  </div>
+
+  <div class="al al-c" style="margin-top:20px">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div>
+      <strong>Note méthodologique</strong>
+      <p>Les normes présentées dans ce document sont indicatives et varient selon les laboratoires, les kits de dosage et les populations de référence. Elles doivent être interprétées dans le contexte clinique individuel et en comparaison avec la baseline de chaque athlète. Ce document ne constitue pas un avis médical.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="ctn">
+    <p><strong style="color:var(--cyan)">PR</strong>ofiling — Guide des Marqueurs Biologiques du Surentraînement — Mars 2026</p>
+    <p style="margin-top:4px">Document de référence basé sur la littérature scientifique. Usage professionnel.</p>
+  </div>
+</footer>
+
+</body>
+</html>

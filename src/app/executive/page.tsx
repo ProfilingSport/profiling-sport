@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import Biomarkers from "@/components/Biomarkers";
-import WhyIsak from "@/components/WhyIsak";
+import OffresExecutive from "@/components/OffresExecutive";
+import ResilienceBio from "@/components/ResilienceBio";
 
 export const metadata: Metadata = {
-  title: "Entreprises & Dirigeants | PRofiling",
+  title: "Dirigeants & Prévention | PRofiling",
   description:
-    "Bilan Executive Health sur-mesure. Audit clinique ISAK, stratégie nutritionnelle et prévention santé pour dirigeants et entreprises.",
+    "Bilan de résilience biologique pour dirigeants. Prévention du burn-out, gestion du stress et optimisation de l'énergie des décideurs.",
   openGraph: {
-    title: "Entreprises & Dirigeants | PRofiling",
+    title: "Dirigeants & Prévention | PRofiling",
     description:
-      "Bilan Executive Health sur-mesure. Audit clinique ISAK, stratégie nutritionnelle et prévention santé pour dirigeants et entreprises.",
+      "Bilan de résilience biologique pour dirigeants. Prévention du burn-out, gestion du stress et optimisation de l'énergie des décideurs.",
     images: ["/images/og-image.jpg"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Entreprises & Dirigeants | PRofiling",
+    title: "Dirigeants & Prévention | PRofiling",
     description:
-      "Bilan Executive Health sur-mesure. Audit clinique ISAK, stratégie nutritionnelle et prévention santé pour dirigeants et entreprises.",
+      "Bilan de résilience biologique pour dirigeants. Prévention du burn-out, gestion du stress et optimisation de l'énergie des décideurs.",
     images: ["/images/og-image.jpg"],
   },
 };
@@ -54,18 +55,18 @@ export default function ExecutivePage() {
   return (
     <>
       <PageHero
-        badge="Entreprises &amp; Dirigeants"
+        badge="Santé Dirigeant &amp; Prévention"
         title={
           <>
-            L&apos;exigence du{" "}
-            <span className="text-cyan-accent">haut niveau</span>, appliquée
-            à votre quotidien.
+            Protégez votre premier capital :{" "}
+            <span className="text-cyan-accent">Vous</span>.
           </>
         }
-        subtitle="Gestion du stress, optimisation de l'énergie et prévention santé. Un accompagnement clinique sur-mesure pour les décideurs."
+        subtitle="Le burn-out n'est pas qu'une fatigue mentale, c'est un effondrement physiologique. Découvrez l'approche clinique pour mesurer, anticiper et optimiser la résilience des décideurs."
       />
       <div className="gradient-line" />
-      <WhyIsak />
+
+      <ResilienceBio />
       <div className="gradient-line" />
 
       {/* Biomarkers – customized for Executive */}
@@ -84,126 +85,7 @@ export default function ExecutivePage() {
       />
       <div className="gradient-line" />
 
-      {/* Offres Entreprises */}
-      <section className="py-24 md:py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <p className="text-cyan-accent text-sm font-medium tracking-widest uppercase mb-3">
-              Nos offres
-            </p>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Un accompagnement à la hauteur de vos{" "}
-              <span className="text-cyan-accent">ambitions</span>.
-            </h2>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-6 items-stretch">
-            {/* CARTE 1 — Bilan Santé Dirigeant */}
-            <div className="relative bg-bg-card rounded-xl border border-white/5 hover:border-white/10 overflow-hidden flex flex-col transition-all">
-              <div className="p-6 flex flex-col flex-1">
-                <span className="inline-block w-fit text-xs font-semibold tracking-widest uppercase px-2.5 py-1 rounded mb-4 bg-white/5 text-text-secondary">
-                  Audit Individuel
-                </span>
-                <h3 className="text-xl font-bold mb-1">Bilan Santé Dirigeant</h3>
-                <div className="mb-6 mt-4">
-                  <p className="text-2xl font-bold text-cyan-accent">Sur devis</p>
-                </div>
-                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
-                <ul className="space-y-3 mb-8 flex-1">
-                  {[
-                    "Mesure ISAK complète (15 points).",
-                    "Stratégie Nutrition-Santé personnalisée.",
-                    "Analyse Récupération & Sommeil.",
-                  ].map((f) => (
-                    <li key={f} className="flex gap-3 text-sm">
-                      <svg className="w-4 h-4 text-cyan-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-text-secondary">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#contact"
-                  className="block text-center py-3 rounded font-semibold text-sm transition-all border border-white/10 text-text-secondary hover:border-cyan-accent/30 hover:text-text-primary"
-                >
-                  Demander un bilan
-                </a>
-              </div>
-            </div>
-
-            {/* CARTE 2 — Signature 360 (Noir & Argent) */}
-            <div className="relative rounded-xl border border-[#6B7280] overflow-hidden flex flex-col transition-all hover:border-[#9CA3AF]" style={{ background: "#050505", boxShadow: "0 4px 14px rgba(107,114,128,0.15)" }}>
-              <div className="p-6 flex flex-col flex-1">
-                <span className="inline-block w-fit text-xs font-semibold tracking-widest uppercase px-2.5 py-1 rounded mb-4 bg-[#888888]/10 border border-[#888888]/20 text-[#BBBBBB]">
-                  Offre Signature
-                </span>
-                <h3 className="text-xl font-bold mb-1 text-white">Accompagnement Signature 360</h3>
-                <div className="mb-6 mt-4">
-                  <p className="text-2xl font-bold text-[#CCCCCC]">Sur devis</p>
-                </div>
-                <div className="h-px bg-gradient-to-r from-transparent via-[#888888]/30 to-transparent mb-6" />
-                <ul className="space-y-3 mb-8 flex-1">
-                  {[
-                    "Disponibilité prioritaire & déplacements à discrétion.",
-                    "Suivi nutritionnel continu.",
-                    "Recommandation bilans sanguins ciblés.",
-                    "Monitoring Cortisol & stress.",
-                  ].map((f) => (
-                    <li key={f} className="flex gap-3 text-sm">
-                      <svg className="w-4 h-4 text-[#AAAAAA] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-[#B0B0B0]">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#contact"
-                  className="block text-center py-3 rounded font-semibold text-sm transition-all bg-[#2A2A2A] border border-[#888888]/30 text-[#CCCCCC] hover:bg-[#333333] hover:border-[#AAAAAA]/40 hover:text-white"
-                >
-                  Prendre rendez-vous
-                </a>
-              </div>
-            </div>
-
-            {/* CARTE 3 — Conférences & Workshops */}
-            <div className="relative bg-bg-card rounded-xl border border-white/5 hover:border-white/10 overflow-hidden flex flex-col transition-all">
-              <div className="p-6 flex flex-col flex-1">
-                <span className="inline-block w-fit text-xs font-semibold tracking-widest uppercase px-2.5 py-1 rounded mb-4 bg-white/5 text-text-secondary">
-                  Bilan Équipe
-                </span>
-                <h3 className="text-xl font-bold mb-1">Conférences &amp; Workshops</h3>
-                <div className="mb-6 mt-4">
-                  <p className="text-2xl font-bold text-cyan-accent">Sur devis</p>
-                </div>
-                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
-                <ul className="space-y-3 mb-8 flex-1">
-                  {[
-                    "Masterclass Nutrition & Performance (1h30).",
-                    "Ateliers pratiques en entreprise.",
-                    "Optimisation de la vitalité des collaborateurs.",
-                    "Support digital inclus.",
-                  ].map((f) => (
-                    <li key={f} className="flex gap-3 text-sm">
-                      <svg className="w-4 h-4 text-cyan-accent shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-text-secondary">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#contact"
-                  className="block text-center py-3 rounded font-semibold text-sm transition-all border border-white/10 text-text-secondary hover:border-cyan-accent/30 hover:text-text-primary"
-                >
-                  Organiser une conférence
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <OffresExecutive />
     </>
   );
 }
