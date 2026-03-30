@@ -1,9 +1,11 @@
 export default function Hero() {
   return (
-    <section className="relative md:min-h-screen flex flex-col items-center md:justify-center overflow-x-hidden grid-pattern scanline">
-      {/* Gradient orbs */}
-      <div className="absolute top-1/4 -left-32 w-96 h-96 bg-cyan-accent/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-cyan-accent/5 rounded-full blur-3xl" />
+    <section className="relative md:min-h-screen flex flex-col items-center md:justify-center grid-pattern scanline">
+      {/* Gradient orbs — contained to avoid overflow issues on mobile */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-cyan-accent/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-cyan-accent/5 rounded-full blur-3xl" />
+      </div>
 
       <div className="relative max-w-5xl mx-auto px-6 text-center pt-24 pb-16 md:pt-20 md:pb-0">
         {/* Badge */}
