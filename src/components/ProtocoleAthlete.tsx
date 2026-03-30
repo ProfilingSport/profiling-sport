@@ -12,7 +12,7 @@ const steps = [
   {
     icon: Ruler,
     title: "L'Audit Clinique (ISAK)",
-    desc: "Prise de mesures sur 15 points anatomiques à l'aide de la pince Harpenden. Une cartographie millimétrée, loin des approximations des balances.",
+    desc: "Prise de mesures sur 21 points anatomiques à l'aide de la pince Harpenden. Une cartographie millimétrée, loin des approximations des balances.",
   },
   {
     icon: LineChart,

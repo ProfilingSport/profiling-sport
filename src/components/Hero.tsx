@@ -58,7 +58,7 @@ export default function Hero() {
         {/* Metrics bar */}
         <div className="mt-20 grid grid-cols-3 gap-6 max-w-lg mx-auto">
           {[
-            { value: "15", label: "Points de mesure" },
+            { value: "21", label: "Points de mesure" },
             { value: "±0.1", label: "mm de précision" },
             { value: "ISAK", label: "Standard olympique" },
           ].map((item) => (

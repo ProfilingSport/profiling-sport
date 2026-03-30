@@ -36,7 +36,7 @@ const solutionItems = [
       </svg>
     ),
     title: "Protocole ISAK standardisé",
-    desc: "15 mesures anthropométriques selon le protocole international. Reproductible. Vérifiable. Utilisé aux Jeux Olympiques depuis 40 ans.",
+    desc: "21 mesures anthropométriques selon le protocole international. Reproductible. Vérifiable. Utilisé aux Jeux Olympiques depuis 40 ans.",
   },
   {
     icon: (

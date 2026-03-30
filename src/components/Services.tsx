@@ -29,7 +29,7 @@ const offers = [
     priceNote: "(Tarif adapté selon la taille de l'effectif)",
     features: [
       "Intervention sur site (1/2 journée, sans perturber le planning).",
-      "Mesure ISAK complète de l'effectif pro (15 points).",
+      "Mesure ISAK complète de l'effectif pro (21 points).",
       "Cartographie des profils morphologiques.",
       "Rapport global remis au staff médical et technique.",
     ],

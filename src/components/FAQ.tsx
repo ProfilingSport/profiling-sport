@@ -22,7 +22,7 @@ const faqs = [
   {
     question: "Combien de temps dure un bilan ISAK complet ?",
     answer:
-      "La consultation dure en moyenne 45 minutes. Cela comprend la prise des 15 points de mesure et l'envoi de votre rapport anthropométrique dans la journée.",
+      "La consultation dure en moyenne 45 minutes. Cela comprend la prise des 21 points de mesure et l'envoi de votre rapport anthropométrique dans la journée.",
   },
   {
     question: "Dois-je venir à jeun ou au repos ?",

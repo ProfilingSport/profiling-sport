@@ -127,7 +127,7 @@ export default function WhyIsak() {
               <div className="mt-4 flex items-center gap-2 justify-end">
                 <div className="h-px w-6 bg-cyan-accent/30" />
                 <span className="text-[10px] text-text-secondary tracking-widest uppercase">
-                  Protocole ISAK — 15 points de mesure
+                  Protocole ISAK — 21 points de mesure
                 </span>
               </div>
             </div>

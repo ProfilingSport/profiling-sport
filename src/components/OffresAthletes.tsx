@@ -9,7 +9,7 @@ const plans = [
     name: "Bilan Initial ISAK",
     price: "75 €",
     features: [
-      "Mesure clinique complète (15 points).",
+      "Mesure clinique complète (21 points).",
       "Détermination du profil morphologique.",
       "Remise du Dashboard PRofiling.",
       "Entretien de restitution (30 min).",
